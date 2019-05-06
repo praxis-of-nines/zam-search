@@ -1,0 +1,54 @@
+/* This file is for your main application css. */
+
+@import "./phoenix.css";
+
+@import "../../deps/phoenix_live_view/assets/css/live_view.css";
+
+nav {
+  width: 100%;
+}
+
+nav li {
+  float: right;
+}
+
+header nav li {
+  margin: 0 35px 12px 0;
+}
+
+.container {
+  max-width: 120.0rem;
+}
+
+.container .search {
+  text-align: center;
+}
+
+.container h1 {
+  color: #424242;
+}
+
+input[type='search'] {
+  border: 0.1rem solid #424242;
+  width: 560px;
+  color: #424242;
+  font-size: 15pt;
+}
+
+button {
+  display: block;
+  margin: 0 auto;
+}
+
+.results {
+  color: #424242;
+}
+
+.results .title a {
+  color: #424242;
+  text-decoration: none;
+  font-weight: bold;
+}
+.results .title a:hover {
+  text-decoration: underline;
+}
