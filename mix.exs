@@ -41,14 +41,16 @@ defmodule Zam.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:httpoison, "~> 1.3", override: true},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
 
       #{:khafra_search, path: "/home/baggy/tylerpierce/khafra_search"}
-      {:khafra_search, "~> 0.1.4"},
+      {:khafra_search, "~> 0.1.5"},
       {:simplestatex, "~> 0.1"},
+      {:giza_sphinxsearch, "~> 1.0.5"},
 
       {:crawlie, path: "../../crawlie", env: :dev, app: false},
       {:floki, "~> 0.21.0"}

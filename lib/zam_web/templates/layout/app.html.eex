@@ -13,7 +13,6 @@
       <section class="container">
         <nav role="navigation">
           <ul>
-            <li><a href="/paiza">Paiza</a></li>
             <li><a href="/about">About Zam</a></li>
           </ul>
         </nav>

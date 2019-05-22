@@ -7,8 +7,8 @@ defmodule Zam.Schema.Weblink do
   schema "weblinks" do
     field :title, :string
     field :link, :string
-    field :description, :string
-    field :samples, :string
+    field :description, :string, default: ""
+    field :samples, :string, default: ""
     field :amt_crawled, :integer, default: 1
     field :score_link, :integer, default: 0
     field :score_zam, :integer, default: 1
@@ -20,6 +20,6 @@ defmodule Zam.Schema.Weblink do
   def changeset(weblink, attrs) do
     weblink
     |> cast(attrs, [:title, :link, :description, :samples, :amt_crawled, :score_link, :score_zam])
-    |> validate_required([:title, :link, :description, :samples], [:trim])
+    |> validate_required([:title, :link], [:trim])
   end
 end

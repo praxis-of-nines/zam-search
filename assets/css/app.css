@@ -33,11 +33,13 @@ input[type='search'] {
   width: 560px;
   color: #424242;
   font-size: 15pt;
+  margin-bottom: 0;
+  border-radius: 0;
 }
 
-button {
+form .search_for {
   display: block;
-  margin: 0 auto;
+  margin: 15px auto;
 }
 
 .results {
@@ -51,4 +53,22 @@ button {
 }
 .results .title a:hover {
   text-decoration: underline;
+}
+.results .result {
+  margin-bottom: 20px;
+}
+
+form .suggestion {
+  display: block;
+  width: 560px;
+  margin: -1px auto 0 auto;
+  border: 1px solid #424242;
+  border-radius: 0;
+  background-color: #EFEFEF;
+  cursor: pointer;
+  color: #000;
+  line-height: 38px;
+  font-size: 14pt;
+  text-align: left;
+  padding: 0 10px;
 }

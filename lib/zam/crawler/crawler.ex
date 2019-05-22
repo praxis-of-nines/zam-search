@@ -1,7 +1,14 @@
 defmodule Zam.Crawler do
+  @moduledoc """
+  The Zam Crawler: Designed for each process crawling root to handle one domain each.  Respects
+  robots.txt and avoids links out to other domains
+  """
   alias Flow
 
   alias Zam.Crawler.Robots
+  alias Zam.Crawler.Stats
+
+  alias Zam.Crawler.ProcessPage
 
 
   @doc """
@@ -9,48 +16,54 @@ defmodule Zam.Crawler do
   crawl progress
   """
   def crawl(url) do
-    _ = :ets.new(:crawler_counts, [:named_table, :public])
-
-    rules = Robots.parse_from(url <> "/robots.txt")
+    rules = case Robots.parse_from(url <> "/robots.txt") do
+      {:ok, rules} -> rules
+      {:error, _reason} -> []
+    end
 
     options = build_options(url, %{}, rules)
     
-    {_stats_ref, results} = Crawlie.crawl_and_track_stats(
+    {stats_ref, results} = Crawlie.crawl_and_track_stats(
       [url],
       Zam.Crawler.ParserLogic,
       options)
 
-    #_stats_printing_task = Task.async(fn -> periodically_dump_stats(stats_ref) end)
-
-    #Task.await(stats_printing_task)
-
-    IO.inspect "DONE!"    
+    _stats_printing_task = Task.async(fn -> periodically_dump_stats(Keyword.get(options, :domain), stats_ref) end)    
 
     poy = results
-    |> Enum.to_list()
+    |> Flow.reduce(fn () -> [] end, &store_page/2)
+    |> Enum.count()
 
-    IO.inspect poy
-    IO.inspect "I MEAN>>> DONE@!"
+    IO.inspect "DONE PROCESSING!"
+    IO.inspect "CRAWLED " <> Integer.to_string(poy)
+
     poy
   end
 
-  # TODO: Move to channel and allow subscription to updates / Also would store updates in database
-  def periodically_dump_stats(ref) do
+  defp store_page(page_data, list_acc) do
+    case ProcessPage.store_page_data(page_data) do
+      {:ok, %{:weblink => weblink_id}} -> 
+        [weblink_id|list_acc]
+      {:ok, %{}} ->
+        list_acc
+      {:error, _} -> 
+        list_acc
+    end
+  end
+
+  @doc """
+  Periodically check the stats to see if we are finished crawling
+  """
+  def periodically_dump_stats(domain, ref) do
     stats = Crawlie.Stats.Server.get_stats(ref)
     
-    IO.puts "STATS AFTER #{Crawlie.Stats.Server.Data.elapsed_usec(stats) / 1_000_000} SECONDS"
-    
-    IO.inspect(stats.status_codes_dist)
-    
-    IO.inspect(:ets.lookup(:crawler_counts, :price_total))
-    IO.inspect(:ets.lookup(:crawler_counts, :items_found))
-    IO.inspect(:ets.lookup(:crawler_counts, :pages_parsed))
-    IO.puts ""
     if Crawlie.Stats.Server.Data.finished?(stats) do
+      Stats.store_responses(domain, stats.status_codes_dist)
+
       :ok
     else
-      Process.sleep(4000)
-      periodically_dump_stats(ref)
+      Process.sleep(10000)
+      periodically_dump_stats(domain, ref)
     end
   end
 
@@ -61,22 +74,41 @@ defmodule Zam.Crawler do
       domain -> domain
     end
 
+    crawl_interval = Keyword.get(rules, :delay_seconds, 0)
+
+    max_visits = get_option_max_visits(crawl_interval)
+
+    {stages, min_demand, max_demand} = get_option_fetch_phase(max_visits)
+
     [
       max_depth: 1,
       min_demand: 1,
       max_demand: 5,
+      max_visits: max_visits,
+      interval: crawl_interval * 1000, # Crawlie counts miliseconds
       fetch_phase: [
-        stages: 20,
-        min_demand: 1,
-        max_demand: 5,
+        stages: stages,
+        min_demand: min_demand,
+        max_demand: max_demand,
       ],
       process_phase: [
-        stages: 8,
-        min_demand: 5,
-        max_demand: 10,
+        stages: 20,
+        min_demand: 1,
+        max_demand: 20,
       ],
       domain: domain,
+      headers: [{"User-agent", Application.get_env(:zam, :user_agent)}],
       bot_rules: rules
     ]
   end
+
+  # Currently set to avoid runs longer than 2 hours (for the most part)
+  # when a delay is requested
+  defp get_option_max_visits(1), do: 7200
+  defp get_option_max_visits(10), do: 360
+  defp get_option_max_visits(integer) when integer < 10, do: 1000
+  defp get_option_max_visits(_), do: 0
+
+  defp get_option_fetch_phase(0), do: {20, 1, 30}
+  defp get_option_fetch_phase(_), do: {1, 1, 2}
 end

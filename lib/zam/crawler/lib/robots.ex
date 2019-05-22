@@ -11,21 +11,14 @@ defmodule Zam.Crawler.Robots do
   ## Example
 
     iex> Zam.Crawler.ParseRobots.parse("https://www.infogalactic.com/robots.txt")
-    {:ok, [{:}]}
+    {:ok, [{:disallow, ["/u/", "/session/"]}, {:delay_seconds, 10}]}
   """
   def parse_from(url) do
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-        {_, instructions} = Enum.reduce(String.split(body, "\n"), {:ok, []}, fn line, {directive, acc} ->
-          case parse_line(String.downcase(String.trim(String.replace(line, " ", ""))), directive) do
-            {:ok, instruction, new_directive} ->
-              {new_directive, [instruction|acc]}
-            {:skip, new_directive} ->
-              {new_directive, acc}
-          end
-        end)
+        instructions = extract_from_body(body)        
 
-        {:ok, instructions}
+        {:ok, compact(instructions)}
       {:ok, %HTTPoison.Response{status_code: 404}} ->
         {:error, "no robots file"}
       {:error, %HTTPoison.Error{reason: reason}} ->
@@ -50,4 +43,29 @@ defmodule Zam.Crawler.Robots do
   end
 
   defp parse_line(_, directive), do: {:skip, directive}
+
+  defp extract_from_body(body) do
+    {_, instructions} = Enum.reduce(String.split(body, "\n"), {:ok, []}, fn line, {directive, acc} ->
+      case parse_line(String.downcase(String.trim(String.replace(line, " ", ""))), directive) do
+        {:ok, instruction, new_directive} ->
+          {new_directive, [instruction|acc]}
+        {:skip, new_directive} ->
+          {new_directive, acc}
+      end
+    end)
+
+    instructions
+  end
+
+  # Create managable instructions by having disallows for example be a list within one option
+  defp compact(instructions) do
+    {instructions, disallow} = Enum.reduce(instructions, {[], []}, fn instruction, {instruction_acc, disallow_acc} ->
+      case instruction do
+        {:disallow, pattern} -> {instruction_acc, [pattern|disallow_acc]}
+        instruction -> {[instruction|instruction_acc], disallow_acc}
+      end
+    end)
+
+    [{:disallow, disallow}|instructions]
+  end
 end

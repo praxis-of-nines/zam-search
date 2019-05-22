@@ -6,14 +6,13 @@ defmodule Zam.Application do
   use Application
 
   def start(_type, _args) do
+    import Supervisor.Spec
+    
     # List all child processes to be supervised
     children = [
-      # Start the Ecto repository
       Zam.Repo,
-      # Start the endpoint when the application starts
-      ZamWeb.Endpoint
-      # Starts a worker by calling: Zam.Worker.start_link(arg)
-      # {Zam.Worker, arg},
+      ZamWeb.Endpoint,
+      supervisor(Giza.Application, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

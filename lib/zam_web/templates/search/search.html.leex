@@ -1,17 +1,24 @@
 <section class="search">
-  <h1><%= gettext "Zam Search", name: "Zam Search" %></h1>
+  <h1><%= gettext "Zam", name: "Zam" %></h1>
 
-  <form action="#" phx-submit="search">
-    <%= search_input :search, :text, placeholder: "" %>
-    <%= submit "Search", phx_disable_with: "Searching.." %>
+  <form action="#" phx-submit="search" phx-change="suggest">
+    <%= search_input :search, :text, placeholder: "", value: @search_for, autocomplete: "off" %>
+    <div class="suggestion" 
+      style="display: <%= @display_suggest %>;" 
+      phx-click="suggestion" 
+      phx-keyup="complete_suggestion"
+      phx-target="window"
+      phx-value="<%= @suggest %>"><%= @suggest %></div>
+    <%= submit "Search", phx_disable_with: "Searching..", class: "search_for" %>
   </form>
 </section>
 
 <section class="results">
   <%= for result <- @results do %>
     <div class="result">
-      <div class="title"><a href="<%= result.link %>"><%= result.title %></a></div>
-      <div class="link"><a href="<%= result.link %>"><%= result.link %></a></div>
+      <div class="title"><a href="https://<%= result.link %>"><%= result.title %></a></div>
+      <div class="link"><a href="https://<%= result.link %>"><%= result.link %></a></div>
+      <div clsas="description"><%= result.description %></div>
     </div>
   <% end %>
 </section>
