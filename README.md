@@ -1,8 +1,11 @@
 # Zam
 
-Zam Search is an example web project of a full service search monolith. It can run distributed or on a single server and as one set of services will: Serve a search website (similar to say duckduckgo), crawl the web using a domain list and depth settings, store the results in your database and index those results for search.
+Zam Search is a demo web project showing a full service search monolith. It can run distributed or on a single server and as one set of services will: Serve a search website (similar to say duckduckgo), crawl the web using a domain list and depth settings, store the results in your database and index those results for search. Though packaged together, splitting the 3 main services out to scale separately is fairly trivial to do.
 
-Below you will find an explanation of tech used in the package and how to run the project locally as well as deploy it, using and ubuntu instance as an example.
+Below you will find an explanation of tech used in the package and how to run the project locally as well as deploy it, using an ubuntu instance as an example.
+
+***Please use responsible scraping only!***
+
 
 ## Packages and Tech used
 
@@ -42,6 +45,8 @@ These steps allow you to run a search engine website locally which will also cra
 Elixir and Postgres are installed already.  This is tested on Ubuntu and some options may vary on other systems.
 
 ```
+# Setup your config first. Copy example_config/ folder to config/ and alter to your environment and wishes
+
 > git clone https://github.com/praxis-of-nines/zam-search.git
 
 > cd zam-search
@@ -50,7 +55,21 @@ Elixir and Postgres are installed already.  This is tested on Ubuntu and some op
 
 > mix ecto.migrate
 
-> 
+> mix zam.create.domain "https://elixirforum.html"
+
+> mix zam.create.index 1 2 daily 1
+
+> mix zam.crawler.crawl all
+
+> mix khafra.sphinx.download linux_64
+
+> mix khafra.gen.sphinxconf
+
+> mix khafra.sphinx.index all
+
+> mix khafra.sphinx.searchd
+
+> mix phx.server
 ```
 
 ## Deployment
@@ -78,8 +97,10 @@ prod#> bin/zam crawl all
 
 prod#> bin/zam download_sphinx linux_64
 prod#> bin/zam gen_config
-prod#> bin/zam searchd
+# NOTE: if you get an error you may need to do an additional linux package install:
+(optional)prod#> sudo apt-get install libpq-dev
 prod#> bin/zam index all
+prod#> bin/zam searchd
 
 # Ok start the website and you should be up and running
 prod#> bin/zam start
