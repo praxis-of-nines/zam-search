@@ -7,20 +7,20 @@ Below you will find an explanation of tech used in the package and how to run th
 ***Please use responsible scraping only!***
 
 
-## Packages and Tech used
+# Packages and Tech used
 
-### Website (Phoenix, LiveView)
+## Website (Phoenix, LiveView)
 
 The website is a standard phoenix setup with Liveview used for the search, suggestion and results.
 
 
-### Storage (Postgres/Ecto)
+## Storage (Postgres/Ecto)
 
 Per discussion on elixirforum some thought Riak KV or TS would be a great solution, and indeed it is.  For now a very thin client and postgres are used so that is a potential desired update. Perhaps we can upgrade the storage client here to accept the idea
 of a driver.
 
 
-### Search (Sphinxsearch/Khafra/Giza)
+## Search (Sphinxsearch/Khafra/Giza)
 
 Sphinx is used to index the stored pages from the database. It is fast, indexes efficiently and doesn't crash. Khafra eases the deployment and testing process and Giza is the Elixir client for Sphinx.
 
@@ -29,7 +29,7 @@ Sphinx is used to index the stored pages from the database. It is fast, indexes 
 [https://hex.pm/packages/giza_sphinxsearch](Giza_SphinxSearch)
 
 
-### Crawling (Crawlie(forked), Quantum, Simplestatex)
+## Crawling (Crawlie(forked), Quantum, Simplestatex)
 
 Crawlie was forked in order to quickly work in a few extra features. Mainly a wait interval so robots.txt could be observed. The
 interval isn't quite working as expected yet but does seem to provide some delay. Can also now set a max amount of pages to visit on a crawl attempt and set a user-agent in your crawlers headers. This combined with randomizing the order links are explored can be used to incrementally crawl large sites day by day. Quantum handles the scheduling of the Crawls. Simplestatex is used to log issues encountered with urls and tabulate crawl stats.
@@ -39,7 +39,7 @@ interval isn't quite working as expected yet but does seem to provide some delay
 [https://hex.pm/packages/quantum](Quantum)
 [https://hex.pm/packages/simplestatex](Simplestatex)
 
-## Run this locally
+# Run this locally
 
 These steps allow you to run a search engine website locally which will also crawl the web and index the findings. Assumes
 Elixir and Postgres are installed already.  This is tested on Ubuntu and some options may vary on other systems.
@@ -72,7 +72,7 @@ Elixir and Postgres are installed already.  This is tested on Ubuntu and some op
 > mix phx.server
 ```
 
-## Deployment
+# Deployment
 
 Assumes you have an ubuntu instance to deploy to. There are many ways to deploy as this is a standard Elixir project. These steps
 provide guidance in getting an index up and running using one possible way.
@@ -108,7 +108,7 @@ prod#> bin/zam start
 # Your schedulers will take care of indexing and crawling from here on out long as the site is up
 ```
 
-## Wishlist
+# Wishlist
 
 * [Crawl] Utilize XML sitemaps
 * [Index] Add to suggestions whole phrase (1st search result)
