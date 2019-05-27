@@ -25,7 +25,7 @@ header nav li {
 }
 
 .container h1 {
-  color: #424242;
+  color: #38ad48;
 }
 
 input[type='search'] {
@@ -42,8 +42,19 @@ form .search_for {
   margin: 15px auto;
 }
 
+.view_next {
+  color: #e09318;
+  font-weight: bold;
+  margin: 15px 0;
+  cursor: pointer;
+}
+
 .results {
   color: #424242;
+}
+
+.zam {
+  color: #e09318;
 }
 
 .results .title a {

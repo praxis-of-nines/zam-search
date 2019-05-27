@@ -8,7 +8,7 @@ defmodule Mix.Tasks.Zam.Create.Domain do
   """
   use Mix.Task
 
-  alias Zam.Schema.{QueryWeblinks, Webdomain}
+  alias Zam.Schema.{QueryWeblinks}
   
   @shortdoc "Create a webdomain manually using the provided domain"
 
@@ -18,7 +18,7 @@ defmodule Mix.Tasks.Zam.Create.Domain do
 
     Mix.shell.info "Creating Domain #{domain}"
 
-    webdomain = %Webdomain{domain: String.trim(domain, "/")}
+    webdomain = %{domain: String.trim(domain, "/")}
 
     case QueryWeblinks.create_webdomain(webdomain) do
       {:ok, %{id: id}} -> Mix.shell.info "Created Successfully (#{id})"

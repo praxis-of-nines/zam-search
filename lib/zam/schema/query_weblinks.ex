@@ -1,19 +1,45 @@
 defmodule Zam.Schema.QueryWeblinks do
   @moduledoc """
-  Query the websites table
+  Query Zam tables
   """
   import Ecto.Query, warn: false
   alias Zam.Repo
 
-  alias Zam.Schema.{Weblink, Webdomain, TextBlob}
+  alias Zam.Schema.{Weblink, Index, Webdomain, TextBlob}
 
 
   # Retrievals
   def get_weblink(link), do: Repo.get_by(Weblink, link: link)
+  def get_webdomain(link), do: Repo.get_by(Weblink, link: link)
   def get_text_blob(weblink_id), do: Repo.get_by(TextBlob, weblink_id: weblink_id)
+
+  def get_indices(:all) do
+    Index
+    |> Ecto.Query.join(:inner, [i], w in Webdomain, on: i.webdomain_id == w.id)
+    |> Ecto.Query.select([i, w], %{:index => i, :webdomain => w})
+    |> Ecto.Query.where([i], i.active == 1)
+    |> Repo.all()
+  end
+
+  def get_indices(interval) when is_binary(interval) do
+    Index
+    |> Ecto.Query.join(:inner, [i], w in Webdomain, on: i.webdomain_id == w.id)
+    |> Ecto.Query.where(interval_index: ^interval)
+    |> Ecto.Query.where([i], i.active == 1)
+    |> Ecto.Query.select([i, w], %{:index => i, :webdomain => w})
+    |> Repo.all()
+  end
+
+  def get_index(webdomain_id) when is_integer(webdomain_id) do
+    Index
+    |> Ecto.Query.join(:inner, [i], w in Webdomain, on: i.webdomain_id == w.id)
+    |> Ecto.Query.select([i, w], %{:index => i, :webdomain => w})
+    |> Repo.get_by(webdomain_id: webdomain_id)
+  end
 
   # Creations
   def create_weblink(%{} = attrs), do: %Weblink{} |> Weblink.changeset(attrs) |> Repo.insert()
+  def create_index(%{} = attrs), do: %Index{} |> Index.changeset(attrs) |> Repo.insert()
   def create_webdomain(%{} = attrs), do: %Webdomain{} |> Webdomain.changeset(attrs) |> Repo.insert()
   def create_text_blob(%{} = attrs), do: %TextBlob{} |> TextBlob.changeset(attrs) |> Repo.insert()
 

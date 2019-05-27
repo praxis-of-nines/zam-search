@@ -23,7 +23,17 @@ defmodule ZamWeb.Live.SearchResults do
   def handle_event("search", %{"search" => %{"text" => search_text}}, socket) do
     results = Search.query!(search_text)
 
-    {:noreply, search_results(search_text, results, socket)}
+    offset = Enum.count(results)
+
+    {:noreply, search_results(search_text, results, offset, socket)}
+  end
+
+  def handle_event("search_results_next_page", _, %{assigns: %{search_for: search_text, offset: offset}} = socket) do
+    results = Search.query!(search_text, offset)
+
+    offset = offset + Enum.count(results)
+
+    {:noreply, search_results(search_text, results, offset, socket)}
   end
 
   @doc """
@@ -45,13 +55,13 @@ defmodule ZamWeb.Live.SearchResults do
   def handle_event("suggestion", value, socket) do
     results = Search.query!(value)
 
-    {:noreply, suggestion_selected(value, results, socket)}
+    {:noreply, suggestion_selected(value, results, Enum.count(results), socket)}
   end
 
   def handle_event("complete_suggestion", @autocomplete_key, %{assigns: %{suggest: value}} = socket) do
     results = Search.query!(value)
 
-    {:noreply, suggestion_selected(value, results, socket)}
+    {:noreply, suggestion_selected(value, results, Enum.count(results), socket)}
   end
 
   def handle_event("complete_suggestion", _key, socket) do
@@ -68,17 +78,18 @@ defmodule ZamWeb.Live.SearchResults do
   # PRIV
   #############################
   defp search_init(socket) do
-    assign(socket, results: [], search_for: "", suggest: "", display_suggest: "none")
+    assign(socket, results: [], search_for: "", suggest: "", display_suggest: "none", offset: 0)
   end
 
-  defp search_results(search_text, [], socket) do
+  defp search_results(search_text, [], _, socket) do
     empty_result(search_text, socket)
   end
 
-  defp search_results(search_text, results, socket) do
+  defp search_results(search_text, results, offset, socket) do
     assign(socket, 
       results: results,
       search_for: search_text,
+      offset: offset,
       display_suggest: "none"
     )
   end
@@ -91,12 +102,12 @@ defmodule ZamWeb.Live.SearchResults do
     assign(socket, suggest: suggestion, display_suggest: "block")
   end
 
-  defp suggestion_selected(search_text, [], socket) do
+  defp suggestion_selected(search_text, [], _, socket) do
     empty_result(search_text, socket)
   end
 
-  defp suggestion_selected(search_text, results, socket) do
-    assign(socket, results: results, search_for: search_text, display_suggest: "none")
+  defp suggestion_selected(search_text, results, offset, socket) do
+    assign(socket, results: results, search_for: search_text, offset: offset, display_suggest: "none")
   end
 
   defp empty_result(search_text, socket) do
@@ -106,6 +117,7 @@ defmodule ZamWeb.Live.SearchResults do
         link: "",
         title: ""
       }],
+      offset: 0,
       search_for: search_text,
       display_suggest: "none"
     )

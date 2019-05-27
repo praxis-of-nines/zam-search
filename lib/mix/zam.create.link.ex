@@ -8,7 +8,7 @@ defmodule Mix.Tasks.Zam.Create.Link do
   """
   use Mix.Task
 
-  alias Zam.Schema.{QueryWeblinks, Weblink}
+  alias Zam.Schema.{QueryWeblinks}
   
   @shortdoc "Create a weblink manually using the provided arguments"
 
@@ -18,7 +18,7 @@ defmodule Mix.Tasks.Zam.Create.Link do
 
     Mix.shell.info "Creating Link #{title} | #{link} | #{description} | #{samples}"
 
-    link = %Weblink{title: title, link: link, description: description, samples: samples}
+    link = %{title: title, link: link, description: description, samples: samples}
 
     case QueryWeblinks.create_weblink(link) do
       {:ok, %{id: id}} -> Mix.shell.info "Created Successfully (#{id})"

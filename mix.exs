@@ -46,13 +46,16 @@ defmodule Zam.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
+      # Deployment
+      {:distillery, "~> 2.0"},
 
       #{:khafra_search, path: "/home/baggy/tylerpierce/khafra_search"}
-      {:khafra_search, "~> 0.1.5"},
-      {:simplestatex, "~> 0.1"},
+      {:khafra_search, "~> 0.1.6"},
+      {:simplestatex, "~> 0.2"},
       {:giza_sphinxsearch, "~> 1.0.5"},
 
-      {:crawlie, path: "../../crawlie", env: :dev, app: false},
+      #{:crawlie, path: "../../crawlie", env: :dev, app: false},
+      {:crawlie, github: "praxis-of-nines/crawlie"},
       {:floki, "~> 0.21.0"}
     ]
   end

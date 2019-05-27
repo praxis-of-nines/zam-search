@@ -7,12 +7,14 @@ defmodule Zam.Application do
 
   def start(_type, _args) do
     import Supervisor.Spec
-    
+
     # List all child processes to be supervised
     children = [
       Zam.Repo,
       ZamWeb.Endpoint,
-      supervisor(Giza.Application, [])
+      supervisor(Giza.Application, []),
+      supervisor(Khafra.Supervisor, []),
+      worker(Zam.Scheduler, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

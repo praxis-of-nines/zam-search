@@ -3,7 +3,7 @@ defmodule SimpleStatEx.Repo.Migrations.CreateSimplestats do
   use Ecto.Migration
 
   def change do
-    create table(:simplestats) do
+    create_if_not_exists table(:simplestats) do
       add :category, :string
       add :period, :string
       add :time, :naive_datetime
@@ -11,8 +11,8 @@ defmodule SimpleStatEx.Repo.Migrations.CreateSimplestats do
 
       timestamps()
     end
-    create unique_index(:simplestats, [:category, :time])
-    create index(:simplestats, [:period])
+    create_if_not_exists unique_index(:simplestats, [:category, :time])
+    create_if_not_exists index(:simplestats, [:period])
 
   end
 end

@@ -47,7 +47,7 @@ defmodule Zam.Crawler.ParserLogic do
     hrefs = Floki.find(parsed, "a")
     |> Floki.filter_out("[rel=nofollow]")
     |> Floki.attribute("a", "href")
-    
+
     uris = Enum.map(hrefs, &URI.merge(current_uri, &1))
 
     # Reject any url's outside of domain and respect robots

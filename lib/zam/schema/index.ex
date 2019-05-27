@@ -5,7 +5,7 @@ defmodule Zam.Schema.Index do
 
 
   schema "indices" do
-    field :weburi_id, :integer
+    field :webdomain_id, :integer
     field :depth, :integer
     field :interval_index, :string
     field :interval_cache, :string
@@ -17,7 +17,7 @@ defmodule Zam.Schema.Index do
   @doc false
   def changeset(index, attrs) do
     index
-    |> cast(attrs, [:weburi_id, :depth, :interval_index, :interval_cache, :active])
-    |> validate_required([:weburi_id])
+    |> cast(attrs, [:webdomain_id, :depth, :interval_index, :interval_cache, :active])
+    |> validate_required([:webdomain_id, :depth, :active, :interval_index])
   end
 end
