@@ -6,6 +6,8 @@ Below you will find an explanation of tech used in the package and how to run th
 
 ***Please use responsible scraping only!***
 
+[Demo Project using Zam (Everything running on a free instance.. don't expect speed!)](https://yamzam.info)
+
 
 # Packages and Tech used
 
@@ -24,9 +26,9 @@ of a driver.
 
 Sphinx is used to index the stored pages from the database. It is fast, indexes efficiently and doesn't crash. Khafra eases the deployment and testing process and Giza is the Elixir client for Sphinx.
 
-* [https://sphinxsearch.com/](Sphinxsearch)
-* [https://hex.pm/packages/khafra_search](KhafraSearch)
-* [https://hex.pm/packages/giza_sphinxsearch](Giza_SphinxSearch)
+* [Sphinxsearch](https://sphinxsearch.com/)
+* [KhafraSearch](https://hex.pm/packages/khafra_search)
+* [Giza_SphinxSearch](https://hex.pm/packages/giza_sphinxsearch)
 
 
 ## Crawling (Crawlie(forked), Quantum, Simplestatex)
@@ -34,10 +36,10 @@ Sphinx is used to index the stored pages from the database. It is fast, indexes 
 Crawlie was forked in order to quickly work in a few extra features. Mainly a wait interval so robots.txt could be observed. The
 interval isn't quite working as expected yet but does seem to provide some delay. Can also now set a max amount of pages to visit on a crawl attempt and set a user-agent in your crawlers headers. This combined with randomizing the order links are explored can be used to incrementally crawl large sites day by day. Quantum handles the scheduling of the Crawls. Simplestatex is used to log issues encountered with urls and tabulate crawl stats.
 
-* [https://github.com/nietaki/crawlie](Crawlie)
-* [https://github.com/praxis-of-nines/crawlie](CrawlieFork)
-* [https://hex.pm/packages/quantum](Quantum)
-* [https://hex.pm/packages/simplestatex](Simplestatex)
+* [Crawlie](https://github.com/nietaki/crawlie)
+* [Crawlie Fork](https://github.com/praxis-of-nines/crawlie)
+* [Quantum](https://hex.pm/packages/quantum)
+* [Simplestatex](https://hex.pm/packages/simplestatex)
 
 
 # Default Setup Guide to Run Locally
