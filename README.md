@@ -82,6 +82,8 @@ provide guidance in getting an index up and running using one possible way.
 
 ```
 # Build production release
+> mix release.init
+# Configure your rel/config.exs and copy the example scrips from example_rel
 > npm run deploy --prefix assets && MIX_ENV=prod mix do phx.digest, release --env=prod
 
 # FTP _build/prod/rel/zam/releases/0.1.0/zam.tar.gz to your production location
