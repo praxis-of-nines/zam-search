@@ -19,6 +19,7 @@ defmodule ZamWeb.Router do
 
     get "/", PageController, :index
     get "/about", PageController, :about
+    get "/paiza", PageController, :paiza
   end
 
   # Other scopes may use custom stacks.

@@ -69,6 +69,17 @@ form .search_for {
   margin-bottom: 20px;
 }
 
+.title_def {
+  color: #38ad48;
+  font-weight: bold;
+}
+.description_def {
+  font-weight: bold;
+}
+.example_def {
+  font-style: italic;
+}
+
 form .suggestion {
   display: block;
   width: 560px;
@@ -82,4 +93,22 @@ form .suggestion {
   font-size: 14pt;
   text-align: left;
   padding: 0 10px;
+}
+
+@media screen and (max-width: 500px) {
+  input[type='search'] {
+    width: 96%;
+  }
+  form .suggestion {
+    width: 96%;
+  }
+
+  header nav li {
+    margin: 0 5px 2px 5px;
+  }
+
+  .container {
+    margin: 0;
+    padding: 0;
+  }
 }

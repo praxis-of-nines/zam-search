@@ -43,6 +43,16 @@ defmodule Zam.Search do
     |> SphinxQL.send()
   end
 
+  def query_definitions(text) do
+    SphinxQL.new()
+    |> SphinxQL.from("i_definition")
+    |> SphinxQL.where("MATCH('@title *#{text}*')")
+    |> SphinxQL.order_by("WEIGHT() DESC")
+    |> SphinxQL.offset(0)
+    |> SphinxQL.limit(1)
+    |> SphinxQL.send()
+  end
+
   def query!(_, offset \\ 0)
 
   def query!(text, offset) do
@@ -54,6 +64,20 @@ defmodule Zam.Search do
       {:error, _error} ->
         # Log error details here as well
         _ = SSX.stat("sphinx search error", :hourly) |> SSX.save()
+
+        []
+    end
+  end
+
+  def query_definitions!(text) do
+    case query_definitions(text) do
+      {:ok, %SphinxqlResponse{matches: matches}} -> 
+        Enum.reverse(Enum.reduce(matches, [], fn [_id, title, desc, example|_], acc ->
+          [%{title: title, description: desc, example: example}|acc]
+        end))
+      {:error, _error} ->
+        # Log error details here as well
+        _ = SSX.stat("sphinx search definition error", :hourly) |> SSX.save()
 
         []
     end

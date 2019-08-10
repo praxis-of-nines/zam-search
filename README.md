@@ -8,6 +8,18 @@ Below you will find an explanation of tech used in the package and how to run th
 
 [Demo Project using Zam (Everything running on a free instance.. don't expect speed!)](https://yamzam.info)
 
+# Features
+
+* Set up to crawl whichever domains desired and stay within or allow to go outside the domain
+* Set up your indexes to crawl with custom options such as depth
+* Obeys robots.txt
+* Sets bookmarks so sites can be indexed over several days (useful when robots has crawl limits set)
+* Indexes crawl results to appear online every hour or however long you set it to (real time is not a big transition, maybe later!)
+* Indexes on domains can be run hourly, weekly or whatever makes sense per domain
+* Serves website using liveview (almost zero javascript dependency) where results can be searched
+* Special index exists for definitions on near-exact searches
+* Release tasks to handle setup
+
 
 # Packages and Tech used
 
@@ -126,3 +138,4 @@ prod#> bin/zam start
 * [Crawl] Make subsequent crawls start where they left off the last time
 * [Web] Optimize behavior of TAB on input (fill input box with suggestion and disable default behavior)
 * [Crawl] Make domain constraint optional
+

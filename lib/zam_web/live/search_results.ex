@@ -23,9 +23,11 @@ defmodule ZamWeb.Live.SearchResults do
   def handle_event("search", %{"search" => %{"text" => search_text}}, socket) do
     results = Search.query!(search_text)
 
+    def_results = Search.query_definitions!(search_text)
+
     offset = Enum.count(results)
 
-    {:noreply, search_results(search_text, results, offset, socket)}
+    {:noreply, search_results(search_text, def_results ++ results, offset, socket)}
   end
 
   def handle_event("search_results_next_page", _, %{assigns: %{search_for: search_text, offset: offset}} = socket) do

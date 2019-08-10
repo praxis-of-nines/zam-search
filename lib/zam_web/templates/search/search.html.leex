@@ -19,11 +19,20 @@
   <% end %>
 
   <%= for result <- @results do %>
-    <div class="result">
-      <div class="title"><a href="https://<%= result.link %>"><%= result.title %></a></div>
-      <div class="link"><a href="https://<%= result.link %>"><%= result.link %></a></div>
-      <div clsas="description"><%= result.description %></div>
-    </div>
+    <%= case result do %>
+      <% %{title: _, link: _, description: _} -> %>
+        <div class="result">
+          <div class="title"><a href="https://<%= result.link %>"><%= result.title %></a></div>
+          <div class="link"><a href="https://<%= result.link %>"><%= result.link %></a></div>
+          <div clsas="description"><%= result.description %></div>
+        </div>
+      <% _ -> %>
+        <div class="result">
+          <div class="title_def"><%= String.capitalize(result.title) %></div>
+          <div class="description_def"><%= String.capitalize(result.description) %>.</div>
+          <div class="example_def">"<%= result.example %>"</div>
+        </div>
+    <% end %>
   <% end %>
   <%= if (@offset > 0) do %>
     <div class="view_next" phx-click="search_results_next_page">View more results</div>

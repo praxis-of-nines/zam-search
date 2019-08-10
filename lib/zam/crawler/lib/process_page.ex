@@ -27,7 +27,7 @@ defmodule Zam.Crawler.ProcessPage do
     case Enum.empty?(weblink_attr) do
       true -> {:error, "no data extracted"}
       false -> 
-        results = store_weblink(%{}, weblink_attr)
+        results = store_weblink(%{link: weblink_attr.link}, weblink_attr)
         |> store_text_blob(webtext_attr)
 
         {:ok, results}

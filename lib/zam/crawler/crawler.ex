@@ -23,43 +23,61 @@ defmodule Zam.Crawler do
   def crawl(:monthly), do: crawl_async(QueryWeblinks.get_indices("monthly"))
 
   def crawl(url) when is_binary(url) do
-    %Webdomain{id: id} = QueryWeblinks.get_webdomain(url)
+    case QueryWeblinks.get_webdomain(url) do
+      %Webdomain{id: id} ->
+        index = QueryWeblinks.get_index(id)
 
-    index = QueryWeblinks.get_index(id)
+        crawl(id, url, index)
+      _ ->
+        IO.puts "Invalid URL, no webdomain record found"
+    end
 
-    crawl(url, index)
+    
   end
 
   def crawl(_) do
     IO.puts "Invalid Index or URL provided to crawl method"
   end
 
-  def crawl(url, index) when is_binary(url) do
-    rules = case Robots.parse_from(url <> "/robots.txt") do
+  def crawl(webdomain_id, url, index) when is_binary(url) do
+    %URI{host: host, scheme: scheme} = URI.parse(url)
+
+    url_robots = scheme <> "://" <> host <> "/robots.txt" 
+
+    rules = case Robots.parse_from(url_robots) do
       {:ok, rules} -> rules
       {:error, _reason} -> []
     end
 
     options = build_options(url, index, rules)
+
+    crawl_urls = case QueryWeblinks.get_bookmark(webdomain_id) do
+      %{bookmark_link: bookmark_url} -> [url, "https://" <> bookmark_url]
+      _ -> [url]
+    end
     
     {stats_ref, results} = Crawlie.crawl_and_track_stats(
-      [url],
+      crawl_urls,
       Zam.Crawler.ParserLogic,
       options)
 
     _stats_printing_task = Task.async(fn -> periodically_dump_stats(Keyword.get(options, :domain), stats_ref) end)    
 
-    result_count = results
+    results = results
     |> Flow.reduce(fn () -> [] end, &store_page/2)
-    |> Enum.count()
+    |> Enum.reverse()
 
-    result_count
+    if (length(results) > 0) do
+      _ = QueryWeblinks.create_bookmark(%{domain_id: webdomain_id, bookmark_link: List.first(results)})
+    end
+
+    length(results)
   end
 
   defp store_page(page_data, list_acc) do
     case ProcessPage.store_page_data(page_data) do
-      {:ok, %{:weblink => weblink_id}} -> 
-        [weblink_id|list_acc]
+      {:ok, %{:link => link}} -> 
+        [link|list_acc]
       {:ok, %{}} ->
         list_acc
       {:error, _} -> 
@@ -84,12 +102,14 @@ defmodule Zam.Crawler do
   end
 
   defp crawl_async(indices) do
-    crawl_tasks = Enum.reduce(indices, [], fn %{index: i, webdomain: %{domain: domain}}, acc ->
-      [Task.async(fn -> crawl(domain, i) end)|acc]
+    crawl_tasks = Enum.reduce(indices, [], fn %{index: i, webdomain: %{id: id, domain: domain}}, acc ->
+      [Task.async(fn -> crawl(id, domain, i) end)|acc]
     end)
 
     Enum.map(crawl_tasks, fn crawl_task -> Task.await(crawl_task, :infinity) end)
   end
+
+  defp build_options(url, %{index: index}, rules), do: build_options(url, index, rules)
 
   defp build_options(url, %{depth: depth} = _index, rules) do
     domain = case url do
@@ -128,11 +148,11 @@ defmodule Zam.Crawler do
 
   # Currently set to avoid runs longer than 2~ hours (for the most part)
   # when a delay is requested (TODO: move these somewhere where they can be controlled
-  # visibly)
-  defp get_option_max_visits(1), do: 10000
-  defp get_option_max_visits(10), do: 720 # use 360 if interval working correctly
-  defp get_option_max_visits(0), do: 20000
-  defp get_option_max_visits(integer) when integer < 10, do: 2000
+  # visibly, conf seems better)
+  defp get_option_max_visits(1), do: 30000
+  defp get_option_max_visits(10), do: 20000
+  defp get_option_max_visits(0), do: 200000
+  defp get_option_max_visits(integer) when integer < 10, do: 10000
   defp get_option_max_visits(_integer), do: 2000
 
   # Flow settings for crawler: {Stages, Min Demand, Max Demand}

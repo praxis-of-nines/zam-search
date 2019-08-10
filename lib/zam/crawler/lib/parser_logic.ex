@@ -15,8 +15,12 @@ defmodule Zam.Crawler.ParserLogic do
 
           {:ok, parsed}
         rescue
-          _e in CaseClauseError -> {:error, :case_clause_error}
-          _e in RuntimeError -> {:error, :runtime_error}
+          e in CaseClauseError -> 
+            IO.inspect e
+            {:error, :case_clause_error}
+          e in RuntimeError -> 
+            IO.inspect e
+            {:error, :runtime_error}
         end
       _unsupported ->
         {:skip, :unsupported_content_type}

@@ -87,6 +87,21 @@ defmodule Zam.ReleaseTasks do
     stop_app()
   end
 
+  def create_definition([title, description, example]) do
+    start_app()
+
+    IO.puts "Creating definition for #{title}"
+
+    definition = %{title: title, description: description, example: example}
+
+    case QueryWeblinks.create_definition(definition) do
+      {:ok, %{id: id}} -> IO.puts "Created Successfully (#{id})"
+      {:error, error} -> IO.puts error
+    end
+
+    stop_app()
+  end
+
   def create_link([title, link, description, samples]) do
     start_app()
 
