@@ -44,7 +44,14 @@ defmodule Zam.Schema.QueryWeblinks do
   def create_webdomain(%{} = attrs), do: %Webdomain{} |> Webdomain.changeset(attrs) |> Repo.insert()
   def create_text_blob(%{} = attrs), do: %TextBlob{} |> TextBlob.changeset(attrs) |> Repo.insert()
   def create_definition(%{} = attrs), do: %Definition{} |> Definition.changeset(attrs) |> Repo.insert()
-  def create_bookmark(%{} = attrs), do: %Bookmark{} |> Bookmark.changeset(attrs) |> Repo.insert()
+  def create_bookmark(%{domain_id: domain_id} = attrs) do
+    bookmark = Bookmark |> Repo.get_by(domain_id: domain_id)
+
+    case bookmark do
+      nil -> %Bookmark{} |> Bookmark.changeset(attrs) |> Repo.insert()
+      bookmark -> bookmark |> Bookmark.changeset(attrs) |> Repo.update()
+    end
+  end
 
   # Updates
   def update_weblink(%Weblink{} = weblink, attrs) do 
