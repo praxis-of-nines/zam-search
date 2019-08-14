@@ -17,6 +17,7 @@ defmodule Zam.Crawler do
   crawl progress
   """
   def crawl(:all), do: crawl_async(QueryWeblinks.get_indices(:all))
+  def crawl(:test), do: crawl_async(QueryWeblinks.get_indices("test"))
   def crawl(:daily), do: crawl_async(QueryWeblinks.get_indices("daily"))
   def crawl(:hourly), do: crawl_async(QueryWeblinks.get_indices("hourly"))
   def crawl(:weekly), do: crawl_async(QueryWeblinks.get_indices("weekly"))
@@ -67,11 +68,13 @@ defmodule Zam.Crawler do
     |> Flow.reduce(fn () -> [] end, &store_page/2)
     |> Enum.reverse()
 
-    if (length(results) > 0) do
-      _ = QueryWeblinks.create_bookmark(%{domain_id: webdomain_id, bookmark_link: List.first(results)})
+    case length(results) do
+      0 -> 
+        0
+      length -> 
+        _ = QueryWeblinks.create_bookmark(%{domain_id: webdomain_id, bookmark_link: List.first(results)})
+        length
     end
-
-    length(results)
   end
 
   defp store_page(page_data, list_acc) do

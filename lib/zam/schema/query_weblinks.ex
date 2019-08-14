@@ -42,7 +42,8 @@ defmodule Zam.Schema.QueryWeblinks do
   def create_weblink(%{} = attrs), do: %Weblink{} |> Weblink.changeset(attrs) |> Repo.insert()
   def create_index(%{} = attrs), do: %Index{} |> Index.changeset(attrs) |> Repo.insert()
   def create_webdomain(%{} = attrs), do: %Webdomain{} |> Webdomain.changeset(attrs) |> Repo.insert()
-  def create_text_blob(%{} = attrs), do: %TextBlob{} |> TextBlob.changeset(attrs) |> Repo.insert()
+  def create_text_blob(%{text: _, weblink_id: _} = attrs), do: %TextBlob{} |> TextBlob.changeset(attrs) |> Repo.insert()
+  def create_text_blob(%{}), do: {:error, "Text or webdomain id missing"}
   def create_definition(%{} = attrs), do: %Definition{} |> Definition.changeset(attrs) |> Repo.insert()
   def create_bookmark(%{domain_id: domain_id} = attrs) do
     bookmark = Bookmark |> Repo.get_by(domain_id: domain_id)

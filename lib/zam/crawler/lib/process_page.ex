@@ -25,7 +25,8 @@ defmodule Zam.Crawler.ProcessPage do
     webtext_attr = build_weblink_data(%{}, :longtext, page_data)
 
     case Enum.empty?(weblink_attr) do
-      true -> {:error, "no data extracted"}
+      true ->
+        {:error, "no data extracted"}
       false -> 
         results = store_weblink(%{link: weblink_attr.link}, weblink_attr)
         |> store_text_blob(webtext_attr)
@@ -44,18 +45,25 @@ defmodule Zam.Crawler.ProcessPage do
           {:error, _error} ->
             acc
         end
-      _ -> 
-        # "recently stored"
-        acc
+      weblink -> 
+        case QueryWeblinks.update_weblink(weblink, attr) do
+          {:ok, %{link: link}} ->
+            %{id: weblink_id} = QueryWeblinks.get_weblink(link)
+            Map.put(acc, :weblink, weblink_id)
+          {:error, _error} ->
+            acc
+        end
     end
   end
 
   def store_text_blob(%{:weblink => weblink_id} = acc, attr) when is_integer(weblink_id) do
     case QueryWeblinks.get_text_blob(weblink_id) do
       nil ->
-        case QueryWeblinks.create_text_blob(attr) do
-          {:ok, %{weblink_id: weblink_id}} -> Map.put(acc, :text_blob, weblink_id)
-          {:error, _error} -> acc
+        case QueryWeblinks.create_text_blob(Map.put(attr, :weblink_id, weblink_id)) do
+          {:ok, %{weblink_id: weblink_id}} -> 
+            Map.put(acc, :text_blob, weblink_id)
+          {:error, _error} -> 
+            acc
         end
       _ ->
         # "recently stored"
@@ -79,7 +87,7 @@ defmodule Zam.Crawler.ProcessPage do
   end
 
   defp build_weblink_data(acc, :link, %{uri: %{host: host, path: path}}) do
-    Map.put(acc, :link, "#{host}#{path}")
+    Map.put(acc, :link, String.trim("#{host}#{path}", "/"))
   end
 
   defp build_weblink_data(acc, :samples, %PageData{samples: {:ok, samples, _}}) do
