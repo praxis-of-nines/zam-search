@@ -130,12 +130,8 @@ prod#> bin/zam start
 * [Crawl] Utilize XML sitemaps
 * [Index] Add to suggestions whole phrase (1st search result)
 * [Web/Search] Add some search key characters for special purpose (|| for or and quoted words etc)
-* [Web] Pagination (load more results or whatever)
-* [Crawl Bug] Crawl intervals have to be implemented better
 * [Crawl] Need more parser options (parse different areas of html situationally)
 * [Index] Implement Zam Score and Link Score (Zam score is general search wellness and quality of page/info, Link is how well it does in search results page ie was it relevant)
 * [Index/DB] Implement more strongly in direction of an append log so historic searches can be done and index picks up only the latest entry. Makes for an easier transition to RIAK as well
-* [Crawl] Make subsequent crawls start where they left off the last time
-* [Web] Optimize behavior of TAB on input (fill input box with suggestion and disable default behavior)
 * [Crawl] Make domain constraint optional
 
