@@ -5,7 +5,7 @@ defmodule Zam.MixProject do
     [
       app: :zam,
       version: "0.1.0",
-      elixir: "~> 1.5",
+      elixir: "~> 1.9",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -49,9 +49,10 @@ defmodule Zam.MixProject do
       # Deployment
       {:distillery, "~> 2.0"},
 
-      #{:khafra_search, path: "/home/baggy/tylerpierce/khafra_search"}
+      #{:khafra_search, path: "/home/baggy/tylerpierce/khafra_search"},
       {:khafra_search, "~> 0.1.6"},
-      {:simplestatex, "~> 0.2"},
+      #{:simplestatex, path: "../../../../tylerpierce/simplestatex", env: :dev, override: true},
+      {:simplestatex, "~> 0.2.3"},
       {:giza_sphinxsearch, "~> 1.0.5"},
 
       #{:crawlie, path: "../../crawlie", env: :dev, app: false},

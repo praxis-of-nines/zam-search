@@ -93,7 +93,7 @@ defmodule Zam.Crawler do
   """
   def periodically_dump_stats(domain, ref) do
     stats = Crawlie.Stats.Server.get_stats(ref)
-    
+
     if Crawlie.Stats.Server.Data.finished?(stats) do
       Stats.store_responses(domain, stats.status_codes_dist)
 

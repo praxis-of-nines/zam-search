@@ -3,6 +3,7 @@ defmodule Zam.Crawler.ParserLogic do
 
   alias Zam.Crawler.Model.PageData
   alias Zam.Crawler.{ExtractTitles, ExtractText}
+  alias Zam.Schema.QueryWeblinks
 
   alias Crawlie.Response
 
@@ -31,7 +32,7 @@ defmodule Zam.Crawler.ParserLogic do
   Extract the meaningful (to search) data from the page along with identifying information
   for final processing.
   """
-  def extract_data(%{status_code: code, uri: uri} = _response, parsed, _options) do    
+  def extract_data(%{status_code: code, uri: uri} = response, parsed, _options) do    
     case code do
       200 ->
         title = ExtractTitles.get(parsed, :title)
@@ -40,6 +41,9 @@ defmodule Zam.Crawler.ParserLogic do
         p     = ExtractText.get(parsed, :p, 3)
 
         [%PageData{uri: uri, code: code, title: title, headings: %{:h1 => h1, :h2 => h2}, text: p, samples: ""}]
+      404 ->
+        _ = QueryWeblinks.create_response_log(%{code: "404", referrer: response.referrer, uri: URI.to_string(uri)})
+        []
       _ ->
         []
     end

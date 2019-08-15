@@ -2,7 +2,7 @@
   <h1><%= gettext "yam", name: "yam" %><span class="zam"><%= gettext "zam", name: "yamzam" %></span></h1>
 
   <form action="#" phx-submit="search" phx-change="suggest">
-    <%= search_input :search, :text, placeholder: "", value: @search_for, autocomplete: "off" %>
+    <%= search_input :search, :text, placeholder: "", value: @search_for, autocomplete: "off", autofocus: true %>
     <div class="suggestion" 
       style="display: <%= @display_suggest %>;" 
       phx-click="suggestion" 
