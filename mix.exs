@@ -52,7 +52,7 @@ defmodule Zam.MixProject do
       #{:khafra_search, path: "/home/baggy/tylerpierce/khafra_search"},
       {:khafra_search, "~> 0.1.6"},
       #{:simplestatex, path: "../../../../tylerpierce/simplestatex", env: :dev, override: true},
-      {:simplestatex, "~> 0.2.3"},
+      {:simplestatex, "~> 0.3.0"},
       {:giza_sphinxsearch, "~> 1.0.5"},
 
       #{:crawlie, path: "../../crawlie", env: :dev, app: false},
