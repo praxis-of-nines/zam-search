@@ -49,10 +49,13 @@ defmodule Zam.MixProject do
       # Deployment
       {:distillery, "~> 2.0"},
 
+      #{:khafra_search, path: "/home/baggy/tylerpierce/khafra_search"},
       {:khafra_search, "~> 0.1.6"},
+      #{:simplestatex, path: "../../../../tylerpierce/simplestatex", env: :dev, override: true},
       {:simplestatex, "~> 0.3.0"},
       {:giza_sphinxsearch, "~> 1.0.5"},
 
+      #{:crawlie, path: "../../crawlie", env: :dev, app: false},
       {:crawlie, github: "praxis-of-nines/crawlie"},
       {:floki, "~> 0.21.0"}
     ]
