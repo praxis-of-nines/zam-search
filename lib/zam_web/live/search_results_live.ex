@@ -1,10 +1,9 @@
-defmodule ZamWeb.Live.SearchResults do
+defmodule ZamWeb.Live.SearchResultsLive do
   @moduledoc """
   The search form and results update live render
   """
-  use Phoenix.LiveView
+  use ZamWeb, :live_view
 
-  alias ZamWeb.SearchView
   alias Zam.Search
 
   @autocomplete_key "Tab"
@@ -13,7 +12,7 @@ defmodule ZamWeb.Live.SearchResults do
   @doc """
   Set default form and result arguments
   """
-  def mount(_session, socket) do
+  def mount(_params, _session, socket) do
     {:ok, search_init(socket)}
   end
 
@@ -68,13 +67,6 @@ defmodule ZamWeb.Live.SearchResults do
 
   def handle_event("complete_suggestion", _key, socket) do
     {:noreply, socket}
-  end
-
-  @doc """
-  Render template
-  """
-  def render(assigns) do
-    SearchView.render("search.html", assigns)
   end
 
   # PRIV

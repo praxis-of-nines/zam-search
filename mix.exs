@@ -33,30 +33,32 @@ defmodule Zam.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.4.4"},
-      {:phoenix_pubsub, "~> 1.1"},
-      {:phoenix_ecto, "~> 4.0"},
-      {:ecto, "~> 3.1.3", override: true},
-      {:ecto_sql, "~> 3.0"},
-      {:postgrex, ">= 0.0.0"},
+      {:phoenix, "~> 1.5.1"},
+      {:phoenix_live_view, "~> 0.13.0"},
+      {:phoenix_live_dashboard, "~> 0.2.0"},
+      {:phoenix_pubsub, "~> 2.0"},
+      {:telemetry_metrics, "~> 0.4"},
+      {:telemetry_poller, "~> 0.4"},
+      {:plug_cowboy, "~> 2.1"},
+      {:phoenix_ecto, "~> 4.1"},
+      {:postgrex, "~> 0.15.1"},
+      {:ecto_sql, "~> 3.4"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:httpoison, "~> 1.3", override: true},
       {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
-      {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
+      {:jason, "~> 1.2"},
       # Deployment
       {:distillery, "~> 2.0"},
-
+      {:edeliver, "~> 1.8"},
+      # Statistics and Indexing
       #{:khafra_search, path: "/home/baggy/tylerpierce/khafra_search"},
       {:khafra_search, "~> 0.1.6"},
       #{:simplestatex, path: "../../../../tylerpierce/simplestatex", env: :dev, override: true},
       {:simplestatex, "~> 0.3.0"},
       {:giza_sphinxsearch, "~> 1.0.5"},
-
-      #{:crawlie, path: "../../crawlie", env: :dev, app: false},
-      {:crawlie, github: "praxis-of-nines/crawlie"},
+      # Crawling and Parsing
+      {:crawlie, "~> 1.0.0"},
       {:floki, "~> 0.21.0"}
     ]
   end

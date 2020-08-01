@@ -11,6 +11,8 @@ defmodule Zam.Application do
     # List all child processes to be supervised
     children = [
       Zam.Repo,
+      ZamWeb.Telemetry,
+      {Phoenix.PubSub, name: Zam.PubSub},
       ZamWeb.Endpoint,
       supervisor(Giza.Application, []),
       supervisor(Khafra.Supervisor, []),
