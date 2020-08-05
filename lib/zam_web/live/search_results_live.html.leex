@@ -22,8 +22,13 @@
     <%= case result do %>
       <% %{title: _, link: _, description: _} -> %>
         <div class="result">
-          <div class="title"><a href="https://<%= result.link %>"><%= result.title %></a></div>
-          <div class="link"><a href="https://<%= result.link %>"><%= result.link %></a></div>
+          <%= if Map.get(result, :img) && String.length(result.img) > 0 do %>
+            <div class="img"><a href="<%= result.link %>">
+              <img src="<%= result.img %>" />
+            </a></div>
+          <% end %>
+          <div class="title"><a href="<%= result.link %>"><%= result.title %></a></div>
+          <div class="link"><a href="<%= result.link %>"><%= result.link %></a></div>
           <div clsas="description"><%= result.description %></div>
         </div>
       <% _ -> %>

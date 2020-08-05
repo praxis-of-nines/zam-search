@@ -39,10 +39,11 @@ defmodule Zam.Crawler.ParserLogic do
         h1    = ExtractTitles.get(parsed, :h1)
         h2    = ExtractTitles.get(parsed, :h2)
         p     = ExtractText.get(parsed, :p, 3)
+        img   = ExtractText.get(parsed, :img, uri.scheme, uri.host)
 
-        [%PageData{uri: uri, code: code, title: title, headings: %{:h1 => h1, :h2 => h2}, text: p, samples: ""}]
+        [%PageData{uri: uri, code: code, img: img, title: title, headings: %{:h1 => h1, :h2 => h2}, text: p, samples: ""}]
       404 ->
-        _ = QueryWeblinks.create_response_log(%{code: "404", referrer: response.referrer, uri: URI.to_string(uri)})
+        _ = QueryWeblinks.create_response_log(%{code: "404", referrer: Map.get(response, "referrer"), uri: URI.to_string(uri)})
         []
       _ ->
         []
@@ -63,13 +64,14 @@ defmodule Zam.Crawler.ParserLogic do
       domain when is_binary(domain) ->
         # Shuffle creates a situation where we visit different pages first each crawl, so
         # there is variety in the case of a max visits interrupt
-        Enum.shuffle(Enum.filter(uris, &(valid_to_crawl(domain, &1.host, &1.path, options))))
+        Enum.filter(uris, &(valid_to_crawl(domain, &1.host, &1.path, options)))
+        |> Enum.shuffle()
       _ ->
         uris
     end
   end
 
-  defp valid_to_crawl(_, _, nil, _), do: true # index page always valid
+  defp valid_to_crawl(domain, host, nil, _) when domain == host, do: true # index page always valid
   defp valid_to_crawl(domain, host, path, options) when domain == host do
     rules = Keyword.get(options, :bot_rules)
 

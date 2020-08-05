@@ -58,8 +58,9 @@ defmodule Zam.Search do
   def query!(text, offset) do
     case query(text, offset) do
       {:ok, %SphinxqlResponse{matches: matches}} -> 
-        Enum.reverse(Enum.reduce(matches, [], fn [_id, title, link, desc|_], acc ->
-          [%{title: title, link: link, description: desc}|acc]
+        # TODO: refactor a bunch of this!
+        Enum.reverse(Enum.reduce(matches, [], fn [_id, title, link, desc, _, _, _, img|_], acc ->    
+          [%{title: title, link: link, description: desc, img: img}|acc]
         end))
       {:error, _error} ->
         # Log error details here as well
@@ -73,7 +74,7 @@ defmodule Zam.Search do
     case query_definitions(text) do
       {:ok, %SphinxqlResponse{matches: matches}} -> 
         Enum.reverse(Enum.reduce(matches, [], fn [_id, title, desc, example|_], acc ->
-          [%{title: title, description: desc, example: example}|acc]
+          [%{title: title, description: desc, example: example, img: nil}|acc]
         end))
       {:error, _error} ->
         # Log error details here as well

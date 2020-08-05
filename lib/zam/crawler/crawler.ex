@@ -15,6 +15,7 @@ defmodule Zam.Crawler do
   @doc """
   Crawl a single or list of domains as well as boot up the standard tracking process to monitor
   crawl progress
+  NOTE: with crawlie 1.0.0 probably can avoid needing async crawl tasks
   """
   def crawl(:all), do: crawl_async(QueryWeblinks.get_indices(:all))
   def crawl(:test), do: crawl_async(QueryWeblinks.get_indices("test"))
@@ -43,8 +44,9 @@ defmodule Zam.Crawler do
   def crawl(webdomain_id, url, index) when is_binary(url) do
     %URI{host: host, scheme: scheme} = URI.parse(url)
 
-    url_robots = scheme <> "://" <> host <> "/robots.txt" 
+    url_robots =  "#{scheme}://#{host}/robots.txt" 
 
+    # Note: crawlie 1.0 claims to respect robots. May be able to take out
     rules = case Robots.parse_from(url_robots) do
       {:ok, rules} -> rules
       {:error, _reason} -> []
@@ -53,7 +55,7 @@ defmodule Zam.Crawler do
     options = build_options(url, index, rules)
 
     crawl_urls = case QueryWeblinks.get_bookmark(webdomain_id) do
-      %{bookmark_link: bookmark_url} -> [url, "https://" <> bookmark_url]
+      %{bookmark_link: bookmark_url} -> [url, "#{scheme}://#{bookmark_url}"]
       _ -> [url]
     end
     

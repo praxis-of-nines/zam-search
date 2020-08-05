@@ -21,6 +21,8 @@ defmodule Zam.Crawler.Robots do
         {:ok, compact(instructions)}
       {:ok, %HTTPoison.Response{status_code: 404}} ->
         {:error, "no robots file"}
+      {:ok, _} ->
+        {:ok, []}
       {:error, %HTTPoison.Error{reason: reason}} ->
         {:error, reason}
     end

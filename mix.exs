@@ -48,6 +48,7 @@ defmodule Zam.MixProject do
       {:httpoison, "~> 1.3", override: true},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.2"},
+      {:html_sanitize_ex, "~> 1.4.1"},
       # Deployment
       {:distillery, "~> 2.0"},
       {:edeliver, "~> 1.8"},

@@ -19,4 +19,41 @@ defmodule Zam.Crawler.ExtractText do
       amt_p -> {:ok, Enum.slice(p, 0..amt_retrieve) |> Floki.text(sep: " "), Integer.to_string(amt_p) <> " p tags found"}
     end
   end
+
+  def get(parsed, :img, scheme, host) do
+    imgs = Floki.find(parsed, "img")
+
+    case imgs do
+      [_, img|_] -> 
+        img = Floki.attribute(img, "src")
+        |> List.first()
+
+        if img do
+          case URI.parse(img) do
+            %URI{host: nil} ->
+              {:ok, "#{scheme}://#{host}/#{img}", "second image"}
+            _ ->
+              {:ok, img, "second image"}
+          end
+        else 
+          {:error, nil, "no images found"}
+        end
+      [img] -> 
+        img = Floki.attribute(img, "src")
+        |> List.first()
+
+        if img do
+          case URI.parse(img) do
+            %URI{host: nil} ->
+              {:ok, "#{scheme}://#{host}/#{img}", "first image"}
+            _ ->
+              {:ok, img, "first image"}
+          end
+        else
+          {:error, nil, "no images found"}
+        end
+      _ -> 
+        {:error, nil, "no images found"}
+    end
+  end
 end

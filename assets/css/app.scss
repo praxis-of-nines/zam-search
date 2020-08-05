@@ -67,6 +67,9 @@ nav .title a {
   text-decoration: underline;
 }
 
+.result {
+  position: relative;
+}
 .results .title a {
   color: #424242;
   text-decoration: none;
@@ -77,6 +80,18 @@ nav .title a {
 }
 .results .result {
   margin-bottom: 20px;
+  min-height: 67px;
+}
+.results .img {
+  position: absolute;
+  top: 0;
+  left: -100px;
+}
+.results img {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #000;
+  border-radius: 3px;
 }
 
 .title_def {
@@ -120,5 +135,9 @@ form .suggestion {
   .container {
     margin: 0;
     padding: 0;
+  }
+
+  .results .img {
+    display: none;
   }
 }

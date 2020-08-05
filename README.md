@@ -134,4 +134,5 @@ prod#> bin/zam start
 * [Index] Implement Zam Score and Link Score (Zam score is general search wellness and quality of page/info, Link is how well it does in search results page ie was it relevant)
 * [Index/DB] Implement more strongly in direction of an append log so historic searches can be done and index picks up only the latest entry. Makes for an easier transition to RIAK as well
 * [Crawl] Make domain constraint optional
+* Update css and use flexboxes and all that
 

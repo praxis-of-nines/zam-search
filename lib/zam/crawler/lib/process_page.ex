@@ -21,6 +21,7 @@ defmodule Zam.Crawler.ProcessPage do
     |> build_weblink_data(:samples, page_data)
     |> build_weblink_data(:description, page_data)
     |> build_weblink_data(:title, page_data)
+    |> build_weblink_data(:img, page_data)
 
     webtext_attr = build_weblink_data(%{}, :longtext, page_data)
 
@@ -80,16 +81,22 @@ defmodule Zam.Crawler.ProcessPage do
   defp build_weblink_data(acc, :longtext, %PageData{text: {:ok, text, _}, headings: heading_map}) do
     # Build text in reverse -> correct order -> Join into space separated string -> trim 
     # -> cut to max length -> put in attr map
-    Map.put(acc, :text, String.slice(String.trim(Enum.join(Enum.reverse([text|Enum.reduce(heading_map, [], fn {_, heading}, acc ->
+    text_final = [text|Enum.reduce(heading_map, [], fn {_, heading}, acc ->
       case heading do
         {:ok, text, _} -> [text|acc]
         _ -> acc
       end
-    end)]), " ")), 0..@longtext_max))
+    end)]
+    |> Enum.reverse()
+    |> Enum.join(" ")
+    |> String.trim()
+    |> String.slice(0..@longtext_max)
+
+    Map.put(acc, :text, text_final)
   end
 
-  defp build_weblink_data(acc, :link, %{uri: %{host: host, path: path}}) do
-    Map.put(acc, :link, String.trim("#{host}#{path}", "/"))
+  defp build_weblink_data(acc, :link, %{uri: %{scheme: scheme, host: host, path: path}}) do
+    Map.put(acc, :link, String.trim("#{scheme}://#{host}#{path}", "/"))
   end
 
   defp build_weblink_data(acc, :samples, %PageData{samples: {:ok, samples, _}}) do
@@ -102,6 +109,14 @@ defmodule Zam.Crawler.ProcessPage do
 
   defp build_weblink_data(acc, :title, %PageData{title: {:ok, title_text, _}}) do
     Map.put(acc, :title, String.slice(title_text, 0..@title_max))
+  end
+
+  defp build_weblink_data(acc, :img, %PageData{img: {:ok, [img_src|_], _}}) do
+    Map.put(acc, :img, String.trim(img_src))
+  end
+
+  defp build_weblink_data(acc, :img, %PageData{img: {:ok, img_src, _}}) do
+    Map.put(acc, :img, String.trim(img_src))
   end
 
   defp build_weblink_data(acc, key, %{uri: %{host: host, path: path}} = page_data) do
