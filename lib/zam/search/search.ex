@@ -57,11 +57,16 @@ defmodule Zam.Search do
 
   def query!(text, offset) do
     case query(text, offset) do
-      {:ok, %SphinxqlResponse{matches: matches}} -> 
-        # TODO: refactor a bunch of this!
-        Enum.reverse(Enum.reduce(matches, [], fn [_id, title, link, desc, _, _, _, img|_], acc ->    
-          [%{title: title, link: link, description: desc, img: img}|acc]
-        end))
+      {:ok, %SphinxqlResponse{fields: fields, matches: matches} = poy} -> 
+        field_map = fields_to_map(fields)
+
+        Enum.reduce(matches, [], fn match, acc ->  
+          [%{title: Enum.at(match, Map.get(field_map, "title")), 
+            link: Enum.at(match, Map.get(field_map, "link")), 
+            description: Enum.at(match, Map.get(field_map, "description")), 
+            img: Enum.at(match, Map.get(field_map, "img"))}|acc]
+        end)
+        |> Enum.reverse()
       {:error, _error} ->
         # Log error details here as well
         _ = SSX.stat("sphinx search error", :hourly) |> SSX.save()
@@ -70,12 +75,25 @@ defmodule Zam.Search do
     end
   end
 
+  defp fields_to_map(fields) do
+    Enum.reduce(fields, {0, %{}}, fn field, {i, acc} -> 
+      {i + 1, Map.put(acc, field, i)} 
+    end)
+    |> elem(1)
+  end
+
   def query_definitions!(text) do
     case query_definitions(text) do
-      {:ok, %SphinxqlResponse{matches: matches}} -> 
-        Enum.reverse(Enum.reduce(matches, [], fn [_id, title, desc, example|_], acc ->
-          [%{title: title, description: desc, example: example, img: nil}|acc]
-        end))
+      {:ok, %SphinxqlResponse{fields: fields, matches: matches}} -> 
+        field_map = fields_to_map(fields)
+
+        Enum.reduce(matches, [], fn match, acc ->
+          [%{title: Enum.at(match, Map.get(field_map, "title")), 
+            description: Enum.at(match, Map.get(field_map, "description")), 
+            example: Enum.at(match, Map.get(field_map, "example")), 
+            img: nil}|acc]
+        end)
+        |> Enum.reverse()
       {:error, _error} ->
         # Log error details here as well
         _ = SSX.stat("sphinx search definition error", :hourly) |> SSX.save()
