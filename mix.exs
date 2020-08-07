@@ -49,6 +49,8 @@ defmodule Zam.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.2"},
       {:html_sanitize_ex, "~> 1.4.1"},
+      # Note: this shouldn't be necessary but crawlies flow isn't deploying
+      {:flow, "~> 0.12.0"},
       # Deployment
       {:distillery, "~> 2.0"},
       {:edeliver, "~> 1.8"},
