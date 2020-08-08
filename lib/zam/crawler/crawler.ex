@@ -55,7 +55,7 @@ defmodule Zam.Crawler do
     options = build_options(url, index, rules)
 
     crawl_urls = case QueryWeblinks.get_bookmark(webdomain_id) do
-      %{bookmark_link: bookmark_url} -> [url, "#{scheme}://#{bookmark_url}"]
+      %{bookmark_link: bookmark_url} -> [url, bookmark_url]
       _ -> [url]
     end
     

@@ -57,7 +57,7 @@ defmodule Zam.Search do
 
   def query!(text, offset) do
     case query(text, offset) do
-      {:ok, %SphinxqlResponse{fields: fields, matches: matches} = poy} -> 
+      {:ok, %SphinxqlResponse{fields: fields, matches: matches}} -> 
         field_map = fields_to_map(fields)
 
         Enum.reduce(matches, [], fn match, acc ->  
