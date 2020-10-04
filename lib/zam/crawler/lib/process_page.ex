@@ -22,6 +22,7 @@ defmodule Zam.Crawler.ProcessPage do
     |> build_weblink_data(:description, page_data)
     |> build_weblink_data(:title, page_data)
     |> build_weblink_data(:img, page_data)
+    |> build_weblink_data(:index, page_data)
 
     webtext_attr = build_weblink_data(%{}, :longtext, page_data)
 
@@ -101,6 +102,10 @@ defmodule Zam.Crawler.ProcessPage do
 
   defp build_weblink_data(acc, :samples, %PageData{samples: {:ok, samples, _}}) do
     Map.put(acc, :samples, samples)
+  end
+
+  defp build_weblink_data(acc, :index, %PageData{index: i}) do
+    Map.put(acc, :index, i)
   end
 
   defp build_weblink_data(acc, :description, %PageData{text: {:ok, text, _}}) do

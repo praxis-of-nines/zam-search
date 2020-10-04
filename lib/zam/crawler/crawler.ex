@@ -11,7 +11,6 @@ defmodule Zam.Crawler do
   alias Zam.Crawler.ProcessPage
   alias Zam.Schema.{QueryWeblinks, Webdomain}
 
-
   @doc """
   Crawl a single or list of domains as well as boot up the standard tracking process to monitor
   crawl progress
@@ -19,6 +18,7 @@ defmodule Zam.Crawler do
   """
   def crawl(:all), do: crawl_async(QueryWeblinks.get_indices(:all))
   def crawl(:test), do: crawl_async(QueryWeblinks.get_indices("test"))
+  def crawl(:test2), do: crawl_async(QueryWeblinks.get_indices("test2"))
   def crawl(:daily), do: crawl_async(QueryWeblinks.get_indices("daily"))
   def crawl(:hourly), do: crawl_async(QueryWeblinks.get_indices("hourly"))
   def crawl(:weekly), do: crawl_async(QueryWeblinks.get_indices("weekly"))
@@ -116,7 +116,7 @@ defmodule Zam.Crawler do
 
   defp build_options(url, %{index: index}, rules), do: build_options(url, index, rules)
 
-  defp build_options(url, %{depth: depth} = _index, rules) do
+  defp build_options(url, %{id: id, depth: depth, image_i: image_i} = _index, rules) do
     domain = case url do
       "https://" <> domain -> domain
       "http://" <> domain -> domain
@@ -130,7 +130,9 @@ defmodule Zam.Crawler do
     {stages, min_demand, max_demand} = get_option_fetch_phase(max_visits)
 
     [
+      index_id: id,
       max_depth: depth,
+      image_i: image_i,
       min_demand: 1,
       max_demand: 5,
       max_visits: max_visits,

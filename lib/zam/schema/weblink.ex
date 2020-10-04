@@ -13,6 +13,7 @@ defmodule Zam.Schema.Weblink do
     field :amt_crawled, :integer, default: 1
     field :score_link, :integer, default: 0
     field :score_zam, :integer, default: 1
+    field :index, :integer
 
     timestamps()
   end
@@ -20,7 +21,7 @@ defmodule Zam.Schema.Weblink do
   @doc false
   def changeset(weblink, attrs) do
     weblink
-    |> cast(attrs, [:title, :link, :img, :description, :samples, :amt_crawled, :score_link, :score_zam])
+    |> cast(attrs, [:title, :link, :img, :description, :samples, :amt_crawled, :score_link, :score_zam, :index])
     |> validate_required([:title, :link], [:trim])
   end
 end

@@ -105,6 +105,15 @@ nav .title a {
   font-style: italic;
 }
 
+.search_types{
+  display: flex;
+  justify-content: center;
+}
+.search_types a {
+  display: block;
+  margin: 0 30px;
+}
+
 form .suggestion {
   display: block;
   width: 560px;

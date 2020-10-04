@@ -11,6 +11,12 @@
       phx-value="<%= @suggest %>"><%= @suggest %></div>
     <%= submit "Search", phx_disable_with: "Searching..", class: "search_for" %>
   </form>
+
+  <div class="search_types">
+    <a href="/?s=<%= @search_for %>">All</a> 
+    <a href="/?t=news&s=<%= @search_for %>">News</a> 
+    <a href="/?t=blog&s=<%= @search_for %>">Blogs</a>
+  </div>
 </section>
 
 <section class="results">

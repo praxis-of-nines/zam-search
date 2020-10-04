@@ -19,28 +19,27 @@ defmodule Zam.Search do
     iex > Search.query!("chinggis kahn")
     [%{title: "Travelling in the Bloody Footsteps..", description: "..", link: "www.example.com.."}, ..]
   """
-  def query(_, offset \\ 0)
+  def query(_, offset \\ 0, tag \\ nil)
 
-  def query("", offset) do
+  def query("", offset, tag) do
     SphinxQL.new()
     |> SphinxQL.from("i_weblink")
-    |> SphinxQL.where("MATCH('')")
+    |> where("", tag)
     |> SphinxQL.option("ranker = expr('sum(score_link * 0.1) + sum(score_zam * 0.15) + sum(lcs*user_weight)*1000 +bm25')")
     |> SphinxQL.order_by("WEIGHT() DESC")
     |> SphinxQL.offset(offset)
     |> SphinxQL.limit(@page_size)
-    |> SphinxQL.send()
   end
 
-  def query(text, offset) do
+  def query(text, offset, tag) do
     SphinxQL.new()
     |> SphinxQL.from("i_weblink")
-    |> SphinxQL.where("MATCH('*#{text}*')")
+    |> where(text, tag)
     |> SphinxQL.option("ranker = expr('sum(score_link * 0.1) + sum(score_zam * 0.15) + sum(lcs*user_weight)*1000 +bm25')")
     |> SphinxQL.order_by("WEIGHT() DESC")
     |> SphinxQL.offset(offset)
     |> SphinxQL.limit(@page_size)
-    |> SphinxQL.send()
+    |> IO.inspect()
   end
 
   def query_definitions(text) do
@@ -53,10 +52,30 @@ defmodule Zam.Search do
     |> SphinxQL.send()
   end
 
-  def query!(_, offset \\ 0)
+  def where(query, "", nil) do
+    query
+    |> SphinxQL.where("MATCH('')")
+  end
 
-  def query!(text, offset) do
-    case query(text, offset) do
+  def where(query, text, nil) do
+    query
+    |> SphinxQL.where("MATCH('*#{text}*')")
+  end
+
+  def where(query, "", tag) do
+    query
+    |> SphinxQL.Recipe.match_and_filter("", tags: tag)
+  end
+
+  def where(query, text, tag) do
+    query
+    |> SphinxQL.Recipe.match_and_filter("*#{text}*", tags: tag)
+  end
+
+  def send(query), do: query |> SphinxQL.send()
+
+  def send!(query) do
+    case SphinxQL.send(query) do
       {:ok, %SphinxqlResponse{fields: fields, matches: matches}} -> 
         field_map = fields_to_map(fields)
 
@@ -69,12 +88,16 @@ defmodule Zam.Search do
         |> Enum.reverse()
       {:error, _error} ->
         # Log error details here as well
-        _ = SSX.stat("sphinx search error", :hourly) |> SSX.save()
+        # Simple stat needs to be updated
+        # :utc_datetime_usec expects microsecond precision, got ..
+        # _ = SSX.stat("sphinx search error", :hourly) |> SSX.save()
 
         []
     end
   end
 
+  # PRIVATE FUNCTIONS
+  ###################
   defp fields_to_map(fields) do
     Enum.reduce(fields, {0, %{}}, fn field, {i, acc} -> 
       {i + 1, Map.put(acc, field, i)} 
