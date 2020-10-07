@@ -26,7 +26,7 @@ defmodule Zam.Search do
     |> SphinxQL.from("i_weblink")
     |> where("", tag)
     |> SphinxQL.option("ranker = expr('sum(score_link * 0.1) + sum(score_zam * 0.15) + sum(lcs*user_weight)*1000 +bm25')")
-    |> SphinxQL.order_by("WEIGHT() DESC")
+    |> SphinxQL.order_by("WEIGHT() DESC, updated_timestamp DESC")
     |> SphinxQL.offset(offset)
     |> SphinxQL.limit(@page_size)
   end
@@ -36,7 +36,7 @@ defmodule Zam.Search do
     |> SphinxQL.from("i_weblink")
     |> where(text, tag)
     |> SphinxQL.option("ranker = expr('sum(score_link * 0.1) + sum(score_zam * 0.15) + sum(lcs*user_weight)*1000 +bm25')")
-    |> SphinxQL.order_by("WEIGHT() DESC")
+    |> SphinxQL.order_by("WEIGHT() DESC, updated_timestamp DESC")
     |> SphinxQL.offset(offset)
     |> SphinxQL.limit(@page_size)
     |> IO.inspect()

@@ -1,4 +1,4 @@
-defmodule Zam.Crawler.ExtractText do
+defmodule Zam.Crawler.ExtractContent do
   @moduledoc """
   Extract text data. This tends to be bodies of content near the top of the page
 
@@ -13,8 +13,14 @@ defmodule Zam.Crawler.ExtractText do
     iex> ExtractText.get(:p, 3)
     {:ok, "this is a body of text this is another body of text", "2 p tags found"}
   """
-  def get(parsed, :p, amt_retrieve) do
-    p = Floki.find(parsed, "p")
+  def get(parsed, :p, amt_retrieve, content) do
+
+    p = case content do
+      nil -> Floki.find(parsed, "p")
+      content -> parsed
+        |> Floki.find(content)
+        |> Floki.find("p")
+    end
 
     case Enum.count(p) do
       0 -> {:warning, nil, "no p tags"}
@@ -22,7 +28,7 @@ defmodule Zam.Crawler.ExtractText do
     end
   end
 
-  def get(parsed, :img, i, scheme, host) do
+  def get(parsed, :img, i, content, scheme, host) do
     meta = Floki.find(parsed, "meta")
 
     meta = meta
@@ -34,14 +40,26 @@ defmodule Zam.Crawler.ExtractText do
     if meta do
       {:ok, List.first(Floki.attribute(meta, "content")), "og:image"}
     else
-      get(:from_body, parsed, :img, i, scheme, host)
+      get(:from_body, parsed, :img, i, content, scheme, host)
     end
   end
 
-  def get(:from_body, parsed, :img, i, scheme, host) do
-    imgs = Floki.find(parsed, "img")
+  def get(:from_body, parsed, :img, i, content, scheme, host) do
+    img_result = if content do
+      parsed
+      |> Floki.find(content)
+      |> Floki.find("img")
+      |> Enum.fetch(0)
+    end
 
-    case Enum.fetch(imgs, i) do
+    img_result = if !img_result do
+      Floki.find(parsed, "img")
+      |> Enum.fetch(i)
+    else
+      img_result
+    end
+
+    case img_result do
       {:ok, img} -> 
         img = Floki.attribute(img, "src")
         |> List.first()

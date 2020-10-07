@@ -116,7 +116,7 @@ defmodule Zam.Crawler do
 
   defp build_options(url, %{index: index}, rules), do: build_options(url, index, rules)
 
-  defp build_options(url, %{id: id, depth: depth, image_i: image_i} = _index, rules) do
+  defp build_options(url, %{id: id, depth: depth, image_i: image_i, content: content} = _index, rules) do
     domain = case url do
       "https://" <> domain -> domain
       "http://" <> domain -> domain
@@ -133,6 +133,7 @@ defmodule Zam.Crawler do
       index_id: id,
       max_depth: depth,
       image_i: image_i,
+      content: content,
       min_demand: 1,
       max_demand: 5,
       max_visits: max_visits,

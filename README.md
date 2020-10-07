@@ -1,22 +1,22 @@
 # Zam
 
-Zam Search is a demo web project showing a full service search monolith. It can run distributed or on a single server and as one set of services will: Serve a search website (similar to say duckduckgo), crawl the web using a domain list and depth settings, store the results in your database and index those results for search. Though packaged together, splitting the 3 main services out to scale separately is fairly trivial to do.
+Zam Search is a demo web project showing a full service search monolith. It can run distributed or on a single server and as one set of services will: Serve a search website, crawl the web using a domain list and depth settings, store the results in your database and index those results for search. Though packaged together, splitting the 3 main services out to scale separately should be possible as well.
 
 Below you will find an explanation of tech used in the package and how to run the project locally as well as deploy it, using an ubuntu instance as an example.
 
-***Please use responsible scraping only!***
+***Happy (responsible) scraping!***
 
-[Demo Project using Zam (Everything running on a free instance.. don't expect speed!)](https://yamzam.info)
+[Demo Project using Zam (It's all run by a hamster)](https://yamzam.info)
 
 # Features
 
 * Set up to crawl whichever domains desired and stay within or allow to go outside the domain
-* Set up your indexes to crawl with custom options such as depth
+* Set up indices to crawl with custom options such as depth
 * Obeys robots.txt
 * Sets bookmarks so sites can be indexed over several days (useful when robots has crawl limits set)
 * Indexes crawl results to appear online every hour or however long you set it to (real time is not a big transition, maybe later!)
 * Indexes on domains can be run hourly, weekly or whatever makes sense per domain
-* Serves website using liveview (almost zero javascript dependency) where results can be searched
+* Serves website using liveview (zero javascript other than the LiveView hook)
 * Special index exists for definitions on near-exact searches
 * Release tasks to handle setup
 
@@ -89,8 +89,7 @@ Elixir and Postgres are installed already.  This is tested on Ubuntu and some op
 
 # Custom Deployment
 
-Assumes you have an ubuntu instance to deploy to. There are many ways to deploy as this is a standard Elixir project. These steps
-provide guidance in getting an index up and running using one possible way.
+Assumes you have an ubuntu instance to deploy to. There are many ways to deploy as this is a standard Elixir project. These steps provide guidance in getting an index up and running using one possible way.
 
 ```
 # Build production release

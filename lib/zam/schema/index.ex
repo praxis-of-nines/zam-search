@@ -12,6 +12,7 @@ defmodule Zam.Schema.Index do
     field :active, :integer
     field :image_i, :integer
     field :tags, :string
+    field :content, :string
     
     timestamps()
   end
@@ -19,7 +20,7 @@ defmodule Zam.Schema.Index do
   @doc false
   def changeset(index, attrs) do
     index
-    |> cast(attrs, [:webdomain_id, :depth, :interval_index, :interval_cache, :active, :image_i, :tags])
+    |> cast(attrs, [:webdomain_id, :depth, :interval_index, :interval_cache, :active, :image_i, :tags, :content])
     |> validate_required([:webdomain_id, :depth, :active, :interval_index])
   end
 end

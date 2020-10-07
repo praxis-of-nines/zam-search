@@ -21,7 +21,16 @@ defmodule Zam.Schema.Weblink do
   @doc false
   def changeset(weblink, attrs) do
     weblink
-    |> cast(attrs, [:title, :link, :img, :description, :samples, :amt_crawled, :score_link, :score_zam, :index])
+    |> cast(attrs, [
+      :title, 
+      :link, 
+      :img, 
+      :description, 
+      :samples, 
+      :amt_crawled, 
+      :score_link, 
+      :score_zam, 
+      :index])
     |> validate_required([:title, :link], [:trim])
   end
 end

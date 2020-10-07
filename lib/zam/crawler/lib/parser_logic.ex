@@ -2,7 +2,7 @@ defmodule Zam.Crawler.ParserLogic do
   @behaviour Crawlie.ParserLogic
 
   alias Zam.Crawler.Model.PageData
-  alias Zam.Crawler.{ExtractTitles, ExtractText}
+  alias Zam.Crawler.{ExtractTitles, ExtractContent}
   alias Zam.Schema.QueryWeblinks
 
   alias Crawlie.Response
@@ -34,6 +34,7 @@ defmodule Zam.Crawler.ParserLogic do
   """
   def extract_data(%{status_code: code, uri: uri} = response, parsed, options) do
     image_i = Keyword.fetch!(options, :image_i)
+    content = Keyword.fetch!(options, :content)
     i_id = Keyword.fetch!(options, :index_id)
 
     case code do
@@ -41,8 +42,8 @@ defmodule Zam.Crawler.ParserLogic do
         title = ExtractTitles.get(parsed, :title)
         h1    = ExtractTitles.get(parsed, :h1)
         h2    = ExtractTitles.get(parsed, :h2)
-        p     = ExtractText.get(parsed, :p, 3)
-        img   = ExtractText.get(parsed, :img, image_i, uri.scheme, uri.host)
+        p     = ExtractContent.get(parsed, :p, 3, content)
+        img   = ExtractContent.get(parsed, :img, image_i, content, uri.scheme, uri.host)
 
         [%PageData{index: i_id, uri: uri, code: code, img: img, title: title, headings: %{:h1 => h1, :h2 => h2}, text: p, samples: ""}]
       404 ->

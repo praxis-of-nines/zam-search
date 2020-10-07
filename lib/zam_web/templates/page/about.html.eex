@@ -10,9 +10,10 @@
 <h2>YamZam Usage Tips</h2>
 <p>
   <ul>
-    <li>Autocomplete is in alpha (work in progress)</li>
+    <li>A blank search tends to return recently indexed articles</li>
     <li>Tab autocompletes while searching</li>
-    <li>Or search: news | rogan</li>
+    <li>Autocomplete can help but is in alpha (work in progress)</li>
+    <li>'Or' search: news | rogan</li>
     <li>Exclusion: news !Gab</li>
     <li>By title only: @title The Irish News</li>
     <li>Exclude title: @!title youtube</li>
