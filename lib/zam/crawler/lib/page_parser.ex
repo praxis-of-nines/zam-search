@@ -179,6 +179,8 @@ defmodule Zam.Crawler.PageParser do
     %{page_data | imgs: [img|imgs]}
   end
 
+  defp add_image(nil, _, _, page_data), do: page_data
+
   defp add_image(img, scheme, host, page_data) do
     case URI.parse(img) do
       %URI{host: nil} -> add_image("#{scheme}://#{host}/#{img}", page_data)
