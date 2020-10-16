@@ -1,18 +1,20 @@
 <h1>About Yam<span class="zam">Zam</span> Search</h1>
-<p>Zam is a walled search that only indexes select domains. Yam is added to Zam making YamZam.</p>
+<p>Zam is a walled search that only indexes select domains. Yam is The Way.</p>
 
 <h2>Policy</h2>
 <p>There is no user tracking of any kind. You can search and be on your way.</p>
 
 <h2>Terms of Service</h2>
-<p>You can use this service to find things. Anything from height converters to castles.</p>
+<p>You can use this service to find things. The news, height conversion tooling and castles.</p>
 
-<h2>YamZam Usage Tips</h2>
+<h2>How <span class="yam">Yam</span><span class="zam">Zam</span> Makes Money</h2>
+<p>It doesn't.</p>
+
+<h2><span class="yam">Yam</span><span class="zam">Zam</span> Usage Tips</h2>
 <p>
   <ul>
     <li>A blank search tends to return recently indexed articles</li>
-    <li>Tab autocompletes while searching</li>
-    <li>Autocomplete can help but is in alpha (work in progress)</li>
+    <li>Autocomplete/Suggestions doesn't work well at the moment</li>
     <li>'Or' search: news | rogan</li>
     <li>Exclusion: news !Gab</li>
     <li>By title only: @title The Irish News</li>

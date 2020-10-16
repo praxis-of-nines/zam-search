@@ -5,7 +5,7 @@ defmodule Zam.Schema.QueryWeblinks do
   import Ecto.Query, warn: false
   alias Zam.Repo
 
-  alias Zam.Schema.{Weblink, Index, Webdomain, TextBlob, Definition, Bookmark, ResponseLog}
+  alias Zam.Schema.{Weblink, Image, Index, Webdomain, TextBlob, Definition, Bookmark, ResponseLog}
 
 
   # Retrievals
@@ -39,7 +39,7 @@ defmodule Zam.Schema.QueryWeblinks do
   end
 
   # Creations
-  def create_weblink(%{} = attrs), do: %Weblink{} |> Weblink.changeset(attrs) |> Repo.insert()
+  def create_weblink(%{} = attrs), do: %Weblink{} |> Weblink.changeset(attrs) |> Repo.insert(returning: [:id, :link]) |> IO.inspect()
   def create_index(%{} = attrs), do: %Index{} |> Index.changeset(attrs) |> Repo.insert()
   def create_webdomain(%{} = attrs), do: %Webdomain{} |> Webdomain.changeset(attrs) |> Repo.insert()
   def create_text_blob(%{text: _, weblink_id: _} = attrs), do: %TextBlob{} |> TextBlob.changeset(attrs) |> Repo.insert()
@@ -53,6 +53,7 @@ defmodule Zam.Schema.QueryWeblinks do
       bookmark -> bookmark |> Bookmark.changeset(attrs) |> Repo.update()
     end
   end
+  def create_image(%{} = attrs), do: %Image{} |> Image.changeset(attrs) |> Repo.insert()
   def create_response_log(%{} = attrs), do: %ResponseLog{} |> ResponseLog.changeset(attrs) |> Repo.insert()
 
   # Updates

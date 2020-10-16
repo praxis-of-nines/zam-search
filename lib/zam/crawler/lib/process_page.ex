@@ -14,10 +14,12 @@ defmodule Zam.Crawler.ProcessPage do
 
 
   @doc """
-  Store the extracted data that make up the parts of a page search is interested in
+  Normalize and clean the data, build a changeset and then add the link
+  and images if valid
   """
-  def store_page_data(%PageData{} = page_data) do
+  def store_page_data(%PageData{imgs: imgs} = page_data) do
     weblink_attr = build_weblink_data(%{}, :link, page_data)
+    |> build_weblink_data(:updated_at, page_data)
     |> build_weblink_data(:samples, page_data)
     |> build_weblink_data(:description, page_data)
     |> build_weblink_data(:title, page_data)
@@ -30,27 +32,33 @@ defmodule Zam.Crawler.ProcessPage do
       true ->
         {:error, "no data extracted"}
       false -> 
-        results = store_weblink(%{link: weblink_attr.link}, weblink_attr)
+        result = store_weblink(%{link: weblink_attr.link}, weblink_attr, imgs)
         |> store_text_blob(webtext_attr)
 
-        {:ok, results}
+        {:ok, result}
     end
   end
 
-  def store_weblink(acc, attr) do
+  def store_weblink(acc, attr, imgs) do
     case QueryWeblinks.get_weblink(attr.link) do
       nil ->
         case QueryWeblinks.create_weblink(attr) do
-          {:ok, %{link: link}} -> 
-            %{id: weblink_id} = QueryWeblinks.get_weblink(link)
+          {:ok, %{id: weblink_id}} -> 
+            _ = Enum.map(imgs, fn img -> 
+              %{weblink_id: weblink_id, url: img}
+              |> QueryWeblinks.create_image()
+            end)
+
             Map.put(acc, :weblink, weblink_id)
+            # Create Images
           {:error, _error} ->
+            acc
+          _ ->
             acc
         end
       weblink -> 
         case QueryWeblinks.update_weblink(weblink, attr) do
-          {:ok, %{link: link}} ->
-            %{id: weblink_id} = QueryWeblinks.get_weblink(link)
+          {:ok, %{id: weblink_id}} ->
             Map.put(acc, :weblink, weblink_id)
           {:error, _error} ->
             acc
@@ -79,6 +87,14 @@ defmodule Zam.Crawler.ProcessPage do
 
   def store_text_blob(acc), do: acc
 
+  defp build_weblink_data(acc, :updated_at, %PageData{updated_at: nil}) do
+    Map.put(acc, :updated_at, nil)
+  end
+
+  defp build_weblink_data(acc, :updated_at, %PageData{updated_at: updated_at}) do
+    Map.put(acc, :updated_at, updated_at)
+  end
+
   defp build_weblink_data(acc, :longtext, %PageData{text: {:ok, text, _}, headings: heading_map}) do
     # Build text in reverse -> correct order -> Join into space separated string -> trim 
     # -> cut to max length -> put in attr map
@@ -100,7 +116,7 @@ defmodule Zam.Crawler.ProcessPage do
     Map.put(acc, :link, String.trim("#{scheme}://#{host}#{path}", "/"))
   end
 
-  defp build_weblink_data(acc, :samples, %PageData{samples: {:ok, samples, _}}) do
+  defp build_weblink_data(acc, :samples, %PageData{samples: samples}) do
     Map.put(acc, :samples, samples)
   end
 
@@ -108,19 +124,17 @@ defmodule Zam.Crawler.ProcessPage do
     Map.put(acc, :index, i)
   end
 
-  defp build_weblink_data(acc, :description, %PageData{text: {:ok, text, _}}) do
-    Map.put(acc, :description, String.slice(text, 0..@description_max))
+  defp build_weblink_data(acc, :description, %PageData{text: text}) do
+    Map.put(acc, :description, String.slice(String.trim(text), 0..@description_max))
   end
 
-  defp build_weblink_data(acc, :title, %PageData{title: {:ok, title_text, _}}) do
-    Map.put(acc, :title, String.slice(title_text, 0..@title_max))
+  defp build_weblink_data(acc, :title, %PageData{title: title_text}) do
+    Map.put(acc, :title, String.slice(String.trim(title_text), 0..@title_max))
   end
 
-  defp build_weblink_data(acc, :img, %PageData{img: {:ok, [img_src|_], _}}) do
-    Map.put(acc, :img, String.trim(img_src))
-  end
+  defp build_weblink_data(acc, :img, %PageData{img: nil}), do: acc
 
-  defp build_weblink_data(acc, :img, %PageData{img: {:ok, img_src, _}}) do
+  defp build_weblink_data(acc, :img, %PageData{img: img_src}) do
     Map.put(acc, :img, String.trim(img_src))
   end
 

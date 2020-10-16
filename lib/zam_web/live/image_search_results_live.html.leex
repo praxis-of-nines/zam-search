@@ -1,0 +1,16 @@
+<%= render(ZamWeb.PageView, "search_input.html", assigns) %>
+
+<%= if @offset > 0 do %>
+  <div class="view_next" phx-click="search_results_next_page">View more results</div>
+<% end %>
+<section class="results_image">
+  <%= for %{url: url, link: link, title: _title, description: _desc} <- @results do %>
+      <div class="result">
+        <a href="<%= link %>"><img src="<%= url %>" /></a>
+      </div>
+  <% end %>
+</section>
+
+<%= if (@offset > 0) do %>
+  <div class="view_next" phx-click="search_results_next_page">View more results</div>
+<% end %>

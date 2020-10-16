@@ -14,12 +14,19 @@ defmodule Zam.Schema.Weblink do
     field :score_link, :integer, default: 0
     field :score_zam, :integer, default: 1
     field :index, :integer
-
-    timestamps()
+    field :updated_at, :naive_datetime
+    field :inserted_at, :naive_datetime
   end
 
   @doc false
-  def changeset(weblink, attrs) do
+  def changeset(weblink, %{inserted_at: _, updated_at: updated_at} = attrs) do
+    updated_at = case updated_at do
+      nil -> DateTime.utc_now()
+      updated_at -> updated_at
+    end
+
+    attrs = Map.put(attrs, :updated_at, updated_at)
+
     weblink
     |> cast(attrs, [
       :title, 
@@ -30,7 +37,14 @@ defmodule Zam.Schema.Weblink do
       :amt_crawled, 
       :score_link, 
       :score_zam, 
-      :index])
-    |> validate_required([:title, :link], [:trim])
+      :index,
+      :inserted_at,
+      :updated_at])
+    |> validate_required([:title, :link, :inserted_at, :updated_at], [:trim])
+  end
+
+  def changeset(index, attrs) do
+    attrs = Map.put(attrs, :inserted_at, DateTime.utc_now())
+    changeset(index, attrs)
   end
 end

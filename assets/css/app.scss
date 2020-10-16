@@ -56,6 +56,9 @@ form .search_for {
 .zam {
   color: #e09318;
 }
+.yam {
+  color: #38ad48;
+}
 
 nav .title {
   margin: 1rem;
@@ -92,6 +95,20 @@ nav .title a {
   height: 80px;
   border: 2px solid #000;
   border-radius: 3px;
+}
+
+.results_image {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.results_image .result {
+  margin: 20px;
+}
+.results_image img {
+  height: 120px;
+  border-radius: 3px;
+  border: 2px solid #000;
 }
 
 .title_def {

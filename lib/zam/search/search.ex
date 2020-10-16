@@ -7,7 +7,8 @@ defmodule Zam.Search do
 
   alias SimpleStatEx, as: SSX
 
-  @page_size 20
+  @page_size 33
+  @image_page_size 33
 
 
   @doc """
@@ -39,9 +40,26 @@ defmodule Zam.Search do
     |> SphinxQL.order_by("WEIGHT() DESC, updated_timestamp DESC")
     |> SphinxQL.offset(offset)
     |> SphinxQL.limit(@page_size)
-    |> IO.inspect()
   end
 
+  @doc """
+  Query the images index
+  """
+  def query_images(_, offset \\ 0)
+
+  def query_images(text, offset) do
+    SphinxQL.new()
+    |> SphinxQL.from("i_image")
+    |> where(text, nil)
+    |> SphinxQL.option("ranker = expr('sum(score_link * 0.1) + sum(score_zam * 0.15) + sum(lcs*user_weight)*1000 +bm25')")
+    |> SphinxQL.order_by("WEIGHT() DESC, updated_timestamp DESC")
+    |> SphinxQL.offset(offset)
+    |> SphinxQL.limit(@image_page_size)
+  end
+
+  @doc """
+  Query the definitions index, a list of predefined search results
+  """
   def query_definitions(text) do
     SphinxQL.new()
     |> SphinxQL.from("i_definition")
@@ -80,10 +98,11 @@ defmodule Zam.Search do
         field_map = fields_to_map(fields)
 
         Enum.reduce(matches, [], fn match, acc ->  
-          [%{title: Enum.at(match, Map.get(field_map, "title")), 
-            link: Enum.at(match, Map.get(field_map, "link")), 
-            description: Enum.at(match, Map.get(field_map, "description")), 
-            img: Enum.at(match, Map.get(field_map, "img"))}|acc]
+          [%{title: Enum.at(match, Map.get(field_map, "title", 911), nil), 
+            link: Enum.at(match, Map.get(field_map, "link", 911), nil), 
+            description: Enum.at(match, Map.get(field_map, "description", 911), nil), 
+            img: Enum.at(match, Map.get(field_map, "img", 911), nil),
+            url: Enum.at(match, Map.get(field_map, "url", 911), nil)}|acc]
         end)
         |> Enum.reverse()
       {:error, _error} ->

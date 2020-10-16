@@ -17,6 +17,7 @@ defmodule ZamWeb.Router do
   scope "/", ZamWeb do
     pipe_through [:browser]
 
+    live "/images", Live.ImageSearchResultsLive, :index
     live "/", Live.SearchResultsLive, :index
   end
 

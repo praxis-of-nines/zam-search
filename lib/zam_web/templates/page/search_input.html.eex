@@ -1,0 +1,21 @@
+<section class="search">
+  <h1><%= gettext "yam", name: "yam" %><span class="zam"><%= gettext "zam", name: "yamzam" %></span></h1>
+
+  <form action="#" phx-submit="search" phx-change="suggest">
+    <%= search_input :search, :text, placeholder: "", value: @search_for, autocomplete: "off", autofocus: true %>
+    <div class="suggestion" 
+      style="display: <%= @display_suggest %>;" 
+      phx-click="suggestion" 
+      phx-keyup="complete_suggestion"
+      phx-target="window"
+      phx-value="<%= @suggest %>"><%= @suggest %></div>
+    <%= submit "Search", phx_disable_with: "Searching..", class: "search_for" %>
+  </form>
+
+  <div class="search_types">
+    <a href="/?s=<%= @search_for %>">All</a> 
+    <a href="/images?s=<%= @search_for %>">Images</a> 
+    <a href="/?t=news&s=<%= @search_for %>">News</a> 
+    <a href="/?t=blog&s=<%= @search_for %>">Blogs</a>
+  </div>
+</section>

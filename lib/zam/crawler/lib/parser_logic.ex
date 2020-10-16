@@ -2,19 +2,19 @@ defmodule Zam.Crawler.ParserLogic do
   @behaviour Crawlie.ParserLogic
 
   alias Zam.Crawler.Model.PageData
-  alias Zam.Crawler.{ExtractTitles, ExtractContent}
+  alias Zam.Crawler.PageParser
   alias Zam.Schema.QueryWeblinks
 
   alias Crawlie.Response
 
+  @max_paragraphs 3
+  @max_images_per_page 3
 
   def parse(%Response{} = response, _options) do
     case Response.content_type_simple(response) do
       "text/html" ->
         try do
-          parsed = Floki.parse(response.body)
-
-          {:ok, parsed}
+          {:ok, Floki.parse(response.body)}
         rescue
           e in CaseClauseError -> 
             IO.inspect e
@@ -32,24 +32,28 @@ defmodule Zam.Crawler.ParserLogic do
   Extract the meaningful (to search) data from the page along with identifying information
   for final processing.
   """
-  def extract_data(%{status_code: code, uri: uri} = response, parsed, options) do
-    image_i = Keyword.fetch!(options, :image_i)
+  def extract_data(%{status_code: code, uri: uri, headers: headers} = response, parsed, options) do
     content = Keyword.fetch!(options, :content)
     i_id = Keyword.fetch!(options, :index_id)
 
-    case code do
-      200 ->
-        title = ExtractTitles.get(parsed, :title)
-        h1    = ExtractTitles.get(parsed, :h1)
-        h2    = ExtractTitles.get(parsed, :h2)
-        p     = ExtractContent.get(parsed, :p, 3, content)
-        img   = ExtractContent.get(parsed, :img, image_i, content, uri.scheme, uri.host)
-
-        [%PageData{index: i_id, uri: uri, code: code, img: img, title: title, headings: %{:h1 => h1, :h2 => h2}, text: p, samples: ""}]
-      404 ->
-        _ = QueryWeblinks.create_response_log(%{code: "404", referrer: Map.get(response, "referrer"), uri: URI.to_string(uri)})
+    cond do
+      code >= 200 && code < 300 ->
+        {parsed, %PageData{uri: uri}}
+        |> PageParser.headers(headers)
+        |> PageParser.page_title()
+        |> PageParser.meta()
+        |> PageParser.titles()
+        |> PageParser.text(content, @max_paragraphs)
+        |> PageParser.images(content, @max_images_per_page, uri.scheme, uri.host)
+        |> elem(1)
+        |> Map.put(:index, i_id)
+        |> List.duplicate(1)
+      code == 404 ->
+        _ = %{code: "404", uri: URI.to_string(uri)}
+        |> Map.put(:referrer, Map.get(response, "referrer"))
+        |> QueryWeblinks.create_response_log()
         []
-      _ ->
+      true ->
         []
     end
   end

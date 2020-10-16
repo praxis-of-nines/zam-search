@@ -39,6 +39,7 @@ defmodule Zam.MixProject do
       {:phoenix_pubsub, "~> 2.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
+      {:timex, "~> 3.6"},
       {:plug_cowboy, "~> 2.1"},
       {:phoenix_ecto, "~> 4.1"},
       {:postgrex, "~> 0.15.1"},
