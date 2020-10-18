@@ -39,7 +39,7 @@ defmodule Zam.Schema.QueryWeblinks do
   end
 
   # Creations
-  def create_weblink(%{} = attrs), do: %Weblink{} |> Weblink.changeset(attrs) |> Repo.insert(returning: [:id, :link])
+  def create_weblink(%{} = attrs), do: %Weblink{} |> Weblink.changeset(attrs) |> Repo.insert(returning: [:id, :link]) |> IO.inspect()
   def create_index(%{} = attrs), do: %Index{} |> Index.changeset(attrs) |> Repo.insert()
   def create_webdomain(%{} = attrs), do: %Webdomain{} |> Webdomain.changeset(attrs) |> Repo.insert()
   def create_text_blob(%{text: _, weblink_id: _} = attrs), do: %TextBlob{} |> TextBlob.changeset(attrs) |> Repo.insert()
