@@ -40,6 +40,7 @@ defmodule Zam.Crawler.ParserLogic do
       code >= 200 && code < 300 ->
         {parsed, %PageData{uri: uri}}
         |> PageParser.headers(headers)
+        |> PageParser.url(uri)
         |> PageParser.page_title()
         |> PageParser.meta()
         |> PageParser.titles()

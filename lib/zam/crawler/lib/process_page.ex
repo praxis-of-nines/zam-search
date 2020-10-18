@@ -43,15 +43,16 @@ defmodule Zam.Crawler.ProcessPage do
     case QueryWeblinks.get_weblink(attr.link) do
       nil ->
         case QueryWeblinks.create_weblink(attr) do
-          {:ok, %{id: weblink_id}} -> 
+          {:ok, %{id: weblink_id}} ->
+            # Create Images
             _ = Enum.map(imgs, fn img -> 
               %{weblink_id: weblink_id, url: img}
               |> QueryWeblinks.create_image()
             end)
 
             Map.put(acc, :weblink, weblink_id)
-            # Create Images
           {:error, _error} ->
+            IO.inspect attr
             acc
           _ ->
             acc

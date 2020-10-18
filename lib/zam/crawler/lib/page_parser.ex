@@ -13,8 +13,9 @@ defmodule Zam.Crawler.PageParser do
     headers
     |> Enum.reduce(page_data, fn header, acc ->
       case header do
-        {"Last-Modified", date} -> 
-          %{acc | updated_at: Timex.parse!(date, "{RFC1123}")}
+        # Taking out, doesn't give enough
+        #{"Last-Modified", date} -> 
+        #  %{acc | updated_at: Timex.parse!(date, "{RFC1123}")}
         _ -> 
           acc
       end
@@ -22,22 +23,17 @@ defmodule Zam.Crawler.PageParser do
     |> return_tuple(parsed)
   end
 
-  def timestamp(parse_tuple, nil), do: parse_tuple
-
-  def timestamp({parsed, page_data}, content) do
-    Floki.find(parsed, content)
-    |> Floki.find(".date-header")
-    |> List.first()
-    |> timestamp_if(page_data)
+  @doc """
+  Extract data from the url such as the date of the post if it's in a format
+  such as /2020/10/05/.. or /2020/10/..
+  """
+  def url(parsed_tuple, %{path: nil}), do: parsed_tuple
+  def url({parsed, page_data}, %{path: path}) do    
+    path
+    |> String.trim("/")
+    |> String.split("/")
+    |> date_from_url_parts({{nil, nil, nil}, {0, 0, 0}}, page_data)
     |> return_tuple(parsed)
-  end
-
-  defp timestamp_if(nil, page_data), do: page_data
-
-  defp timestamp_if(timestamp_div, page_data) do
-    timestamp = Floki.text(timestamp_div)
-
-    %{page_data | updated_at: timestamp}
   end
 
   @doc """
@@ -201,4 +197,48 @@ defmodule Zam.Crawler.PageParser do
   defp if_empty(found_parsed, _, _), do: found_parsed
 
   defp return_tuple(page_data, parsed), do: {parsed, page_data}
+
+  defp date_from_url_parts([year|t], {{nil, month, day}, time} = erltime, page_data) do
+    if year =~ ~r/2[0-9][0-9][0-9]/ do
+      date_from_url_parts(t, {{String.to_integer(year), month, day}, time}, page_data)
+    else
+      date_from_url_parts(t, erltime, page_data)
+    end
+  end
+
+  defp date_from_url_parts([month|t], {{year, nil, day}, time}, page_data) when not is_nil(year) do
+    if month =~ ~r/[0-2][1-9]/ || month =~ ~r/[1-9]/ do
+      date_from_url_parts(t, {{year, String.to_integer(month), day}, time}, page_data)
+    else
+      page_data
+    end
+  end
+
+  defp date_from_url_parts([day|_], {{year, month, nil}, time}, page_data) when not is_nil(year) and not is_nil(month) do
+    datetime = if String.length(day) < 3 && (day =~ ~r/[0-3][0-9]/ or day =~ ~r/[0-9]/) do
+      {{year, month, String.to_integer(day)}, time}
+      |> Timex.to_datetime("Etc/UTC")
+      |> Timex.to_naive_datetime()
+    else
+      {{year, month, 1}, time}
+      |> Timex.to_datetime("Etc/UTC")
+      |> Timex.to_naive_datetime()
+    end
+
+    %{page_data | updated_at: datetime}
+  end
+
+  defp date_from_url_parts(_, {{year, month, _}, time}, page_data) when not is_nil(year) and not is_nil(month) do
+    datetime = {{year, month, 1}, time}
+    |> Timex.to_datetime("Etc/UTC")
+    |> Timex.to_naive_datetime()
+
+    %{page_data | updated_at: datetime}
+  end
+
+  defp date_from_url_parts([_|t], erl_time, page_data) do
+    date_from_url_parts(t, erl_time, page_data)
+  end
+
+  defp date_from_url_parts(_, _, page_data), do: page_data
 end
