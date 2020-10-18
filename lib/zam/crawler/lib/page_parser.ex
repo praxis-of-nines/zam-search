@@ -199,7 +199,7 @@ defmodule Zam.Crawler.PageParser do
   defp return_tuple(page_data, parsed), do: {parsed, page_data}
 
   defp date_from_url_parts([year|t], {{nil, month, day}, time} = erltime, page_data) do
-    if year =~ ~r/2[0-9][0-9][0-9]/ do
+    if String.length(year) == 4 && year =~ ~r/2[0-9][0-9][0-9]/ do
       date_from_url_parts(t, {{String.to_integer(year), month, day}, time}, page_data)
     else
       date_from_url_parts(t, erltime, page_data)
@@ -207,7 +207,7 @@ defmodule Zam.Crawler.PageParser do
   end
 
   defp date_from_url_parts([month|t], {{year, nil, day}, time}, page_data) when not is_nil(year) do
-    if month =~ ~r/[0-2][1-9]/ || month =~ ~r/[1-9]/ do
+    if String.length(month) < 3 && (month =~ ~r/[0-2][1-9]/ || month =~ ~r/[1-9]/) do
       date_from_url_parts(t, {{year, String.to_integer(month), day}, time}, page_data)
     else
       page_data
@@ -215,7 +215,7 @@ defmodule Zam.Crawler.PageParser do
   end
 
   defp date_from_url_parts([day|_], {{year, month, nil}, time}, page_data) when not is_nil(year) and not is_nil(month) do
-    datetime = if String.length(day) < 3 && (day =~ ~r/[0-3][0-9]/ or day =~ ~r/[0-9]/) do
+    datetime = if String.length(day) < 3 && (day =~ ~r/[0-3][0-9]/ || day =~ ~r/[0-9]/) do
       {{year, month, String.to_integer(day)}, time}
       |> Timex.to_datetime("Etc/UTC")
       |> Timex.to_naive_datetime()
