@@ -115,8 +115,8 @@ defmodule Zam.Crawler.ProcessPage do
 
   defp build_weblink_data(acc, :link, %{uri: %{scheme: scheme, host: host, path: path}}) do
     cond do
-      String.length("#{scheme}://#{host}#{path}") < 255 ->
-        Map.put(acc, :link, String.trim("#{scheme}://#{host}#{path}", "/"))
+      String.length("https://#{host}#{path}") < 255 ->
+        Map.put(acc, :link, String.trim("https://#{host}#{path}", "/"))
       true ->
         acc
     end

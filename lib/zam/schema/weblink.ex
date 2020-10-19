@@ -21,7 +21,7 @@ defmodule Zam.Schema.Weblink do
   @doc false
   def changeset(weblink, %{inserted_at: _, updated_at: updated_at} = attrs) do
     updated_at = case updated_at do
-      nil -> Timex.shift(DateTime.utc_now(), days: -10) 
+      nil -> Timex.shift(DateTime.utc_now(), days: -60) 
       updated_at -> updated_at
     end
 
