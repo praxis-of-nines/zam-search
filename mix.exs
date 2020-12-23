@@ -33,9 +33,9 @@ defmodule Zam.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5.1"},
-      {:phoenix_live_view, "~> 0.13.0"},
-      {:phoenix_live_dashboard, "~> 0.2.0"},
+      {:phoenix, "~> 1.5.7"},
+      {:phoenix_live_view, "~> 0.15.1"},
+      {:phoenix_live_dashboard, "~> 0.4.0"},
       {:phoenix_pubsub, "~> 2.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
@@ -62,7 +62,8 @@ defmodule Zam.MixProject do
       {:giza_sphinxsearch, "~> 1.0.5"},
       # Crawling and Parsing
       {:crawlie, "~> 1.0.0"},
-      {:floki, "~> 0.29.0"}
+      {:floki, "~> 0.29.0"},
+      {:html5ever, "~> 0.8.0"}
     ]
   end
 
