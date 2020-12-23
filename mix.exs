@@ -20,7 +20,7 @@ defmodule Zam.MixProject do
   def application do
     [
       mod: {Zam.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :eex, :toml]
     ]
   end
 
