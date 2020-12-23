@@ -49,7 +49,6 @@ defmodule Zam.MixProject do
       {:httpoison, "~> 1.3", override: true},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.2"},
-      {:html_sanitize_ex, "~> 1.4.1"},
       # Note: this shouldn't be necessary but crawlies flow isn't deploying
       {:flow, "~> 0.12.0"},
       # Deployment
