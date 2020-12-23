@@ -8,9 +8,9 @@ defmodule Zam.Crawler.ProcessPage do
   alias Zam.Crawler.Stats
   alias Zam.Schema.QueryWeblinks
 
-  @description_max 225
-  @title_max 120
-  @longtext_max 3000
+  @description_max 250
+  @title_max 180
+  @longtext_max 10000
 
 
   @doc """
@@ -67,17 +67,17 @@ defmodule Zam.Crawler.ProcessPage do
     end
   end
 
-  def store_text_blob(%{:weblink => weblink_id} = acc, _attr) when is_integer(weblink_id) do
+  def store_text_blob(%{:weblink => weblink_id} = acc, attr) when is_integer(weblink_id) do
     case QueryWeblinks.get_text_blob(weblink_id) do
       nil ->
         acc
-        #Disabled until fix for encoding issue
-        #case QueryWeblinks.create_text_blob(Map.put(attr, :weblink_id, weblink_id)) do
-        #  {:ok, %{weblink_id: weblink_id}} -> 
-        #    Map.put(acc, :text_blob, weblink_id)
-        #  {:error, _error} -> 
-        #    acc
-        #end
+        # Enabled but need to ensure no encoding errors
+        case QueryWeblinks.create_text_blob(Map.put(attr, :weblink_id, weblink_id)) do
+          {:ok, %{weblink_id: weblink_id}} -> 
+            Map.put(acc, :text_blob, weblink_id)
+          {:error, _error} -> 
+            acc
+        end
       _ ->
         # "recently stored"
         acc
@@ -96,21 +96,8 @@ defmodule Zam.Crawler.ProcessPage do
     Map.put(acc, :updated_at, updated_at)
   end
 
-  defp build_weblink_data(acc, :longtext, %PageData{text: {:ok, text, _}, headings: heading_map}) do
-    # Build text in reverse -> correct order -> Join into space separated string -> trim 
-    # -> cut to max length -> put in attr map
-    text_final = [text|Enum.reduce(heading_map, [], fn {_, heading}, acc ->
-      case heading do
-        {:ok, text, _} -> [text|acc]
-        _ -> acc
-      end
-    end)]
-    |> Enum.reverse()
-    |> Enum.join(" ")
-    |> String.trim()
-    |> String.slice(0..@longtext_max)
-
-    Map.put(acc, :text, text_final)
+  defp build_weblink_data(acc, :longtext, %PageData{text: text}) do
+    Map.put(acc, :text, String.slice(text, 0..@longtext_max))
   end
 
   defp build_weblink_data(acc, :link, %{uri: %{scheme: scheme, host: host, path: path}}) do

@@ -1,7 +1,7 @@
 defmodule Zam.Crawler do
   @moduledoc """
-  The Zam Crawler: Designed for each process crawling root to handle one domain each.  Respects
-  robots.txt and avoids links out to other domains
+  The Zam Crawler: 
+  Spawns crawling processes for each scheduled domain
   """
   alias Flow
 

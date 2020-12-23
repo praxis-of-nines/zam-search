@@ -87,7 +87,7 @@ defmodule Zam.Crawler.PageParser do
   content tag if provided and found, or a generic paragraph search
   """
   def text({parsed, page_data}, nil, amount) do
-    Floki.find(parsed, "p")
+    parsed
     |> add_text(amount, page_data)
     |> return_tuple(parsed)
   end
@@ -96,8 +96,6 @@ defmodule Zam.Crawler.PageParser do
     content = Floki.find(parsed, content_location)
 
     content
-    |> Floki.find("p")
-    |> if_empty(content, "div")
     |> add_text(amount, page_data)
     |> return_tuple(parsed)
   end
@@ -141,18 +139,17 @@ defmodule Zam.Crawler.PageParser do
 
   defp add_titles(_, _, page_data), do: page_data
 
-  defp add_text(paragraphs, amount, page_data) do
-    paragraph_text = paragraphs
-    |> Enum.slice(0..amount)
+  defp add_text(content, amount, page_data) do
+    paragraph_text = content
     |> Floki.text(sep: " ")
 
-    %{page_data | text: paragraph_text}
+    Map.put(page_data, :text, paragraph_text)
   end
 
   defp add_page_title(nil, page_data), do: page_data
 
   defp add_page_title(title, page_data) do
-    %{page_data | title: Floki.text(title)}
+    Map.put(page_data, :title, Floki.text(title))
   end
 
   defp add_images([], _, _, page_data), do: page_data

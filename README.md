@@ -124,14 +124,12 @@ prod#> bin/zam start
 # Your schedulers will take care of indexing and crawling from here on out long as the site is up
 ```
 
-# Wishlist
+# Under Development
 
+* [BUG] Duplicate images being indexed
+* [DEPRECATION] Use parse/fragment before calling Floki text function
 * [Crawl] Utilize XML sitemaps
 * [Index] Add to suggestions whole phrase (1st search result)
-* [Web/Search] Add some search key characters for special purpose (|| for or and quoted words etc)
-* [Crawl] Need more parser options (parse different areas of html situationally)
-* [Index] Implement Zam Score and Link Score (Zam score is general search wellness and quality of page/info, Link is how well it does in search results page ie was it relevant)
-* [Index/DB] Implement more strongly in direction of an append log so historic searches can be done and index picks up only the latest entry. Makes for an easier transition to RIAK as well
-* [Crawl] Make domain constraint optional
-* Update css and use flexboxes and all that
+* [Index] Implement Zam Score and Link Score (Zam score is general search wellness and quality of page/info, Link is how well it does in search results page ie was it relevant & clicked)
+* [UI] Mobile pass
 
