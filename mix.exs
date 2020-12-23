@@ -62,8 +62,7 @@ defmodule Zam.MixProject do
       {:giza_sphinxsearch, "~> 1.0.5"},
       # Crawling and Parsing
       {:crawlie, "~> 1.0.0"},
-      {:floki, "~> 0.29.0"},
-      {:fast_html, "~> 2.0"}
+      {:floki, "~> 0.29.0"}
     ]
   end
 
