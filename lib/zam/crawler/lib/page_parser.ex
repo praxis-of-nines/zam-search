@@ -88,7 +88,7 @@ defmodule Zam.Crawler.PageParser do
   """
   def text({parsed, page_data}, nil, amount) do
     parsed
-    |> add_text(amount, page_data)
+    |> add_text(page_data)
     |> return_tuple(parsed)
   end
 
@@ -96,7 +96,7 @@ defmodule Zam.Crawler.PageParser do
     content = Floki.find(parsed, content_location)
 
     content
-    |> add_text(amount, page_data)
+    |> add_text(page_data)
     |> return_tuple(parsed)
   end
 
@@ -139,7 +139,7 @@ defmodule Zam.Crawler.PageParser do
 
   defp add_titles(_, _, page_data), do: page_data
 
-  defp add_text(content, amount, page_data) do
+  defp add_text(content, page_data) do
     paragraph_text = content
     |> Floki.text(sep: " ")
 

@@ -97,7 +97,13 @@ defmodule Zam.Crawler.ProcessPage do
   end
 
   defp build_weblink_data(acc, :longtext, %PageData{text: text}) do
-    Map.put(acc, :text, String.slice(text, 0..@longtext_max))
+    clean_text = Regex.replace(~r/[^a-zA-Z0-9 -,?\.]/, text, "")
+    |> String.trim()
+    |> String.slice(0..@longtext_max)
+
+    clean_text = Regex.replace(~r/\s\s+/, clean_text, " ")
+
+    Map.put(acc, :text, clean_text)
   end
 
   defp build_weblink_data(acc, :link, %{uri: %{scheme: scheme, host: host, path: path}}) do
