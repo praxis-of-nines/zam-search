@@ -1,5 +1,5 @@
 <section class="search">
-  <h1><%= gettext "yam", name: "yam" %><span class="zam"><%= gettext "zam", name: "yamzam" %></span></h1>
+  <img src="/bear.jpg" />
 
   <form action="#" phx-submit="search" phx-change="suggest">
     <%= search_input :search, :text, placeholder: "", value: @search_for, autocomplete: "off", autofocus: true %>

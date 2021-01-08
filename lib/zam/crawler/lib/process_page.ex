@@ -70,8 +70,6 @@ defmodule Zam.Crawler.ProcessPage do
   def store_text_blob(%{:weblink => weblink_id} = acc, attr) when is_integer(weblink_id) do
     case QueryWeblinks.get_text_blob(weblink_id) do
       nil ->
-        acc
-        # Enabled but need to ensure no encoding errors
         case QueryWeblinks.create_text_blob(Map.put(attr, :weblink_id, weblink_id)) do
           {:ok, %{weblink_id: weblink_id}} -> 
             Map.put(acc, :text_blob, weblink_id)
@@ -97,16 +95,10 @@ defmodule Zam.Crawler.ProcessPage do
   end
 
   defp build_weblink_data(acc, :longtext, %PageData{text: text}) do
-    clean_text = Regex.replace(~r/[^a-zA-Z0-9 -,?\.]/, text, "")
-    |> String.trim()
-    |> String.slice(0..@longtext_max)
-
-    clean_text = Regex.replace(~r/\s\s+/, clean_text, " ")
-
-    Map.put(acc, :text, clean_text)
+    Map.put(acc, :text, clean_text(text, @longtext_max))
   end
 
-  defp build_weblink_data(acc, :link, %{uri: %{scheme: scheme, host: host, path: path}}) do
+  defp build_weblink_data(acc, :link, %{uri: %{host: host, path: path}}) do
     cond do
       String.length("https://#{host}#{path}") < 255 ->
         Map.put(acc, :link, String.trim("https://#{host}#{path}", "/"))
@@ -118,7 +110,7 @@ defmodule Zam.Crawler.ProcessPage do
   defp build_weblink_data(acc, :samples, %PageData{samples: nil}), do: acc
 
   defp build_weblink_data(acc, :samples, %PageData{samples: samples}) do
-    Map.put(acc, :samples, String.slice(String.trim(samples), 0..250))
+    Map.put(acc, :samples, clean_text(samples, 250))
   end
 
   defp build_weblink_data(acc, :index, %PageData{index: i}) do
@@ -126,7 +118,7 @@ defmodule Zam.Crawler.ProcessPage do
   end
 
   defp build_weblink_data(acc, :description, %PageData{text: text}) do
-    Map.put(acc, :description, String.slice(String.trim(text), 0..@description_max))
+    Map.put(acc, :description, clean_text(text, @description_max))
   end
 
   defp build_weblink_data(acc, :title, %PageData{title: title_text}) do
@@ -136,7 +128,11 @@ defmodule Zam.Crawler.ProcessPage do
   defp build_weblink_data(acc, :img, %PageData{img: nil}), do: acc
 
   defp build_weblink_data(acc, :img, %PageData{img: img_src}) do
-    Map.put(acc, :img, String.trim(img_src))
+    if String.length(img_src) < 255 do
+      Map.put(acc, :img, String.trim(img_src))
+    else
+      acc
+    end
   end
 
   defp build_weblink_data(acc, key, %{uri: %{host: host, path: path}} = page_data) do
@@ -151,5 +147,13 @@ defmodule Zam.Crawler.ProcessPage do
       _ ->
         acc
     end
+  end
+
+  defp clean_text(text, max_length) do
+    clean_text = Regex.replace(~r/[^a-zA-Z0-9 -,?\.]/, text, "")
+    |> String.trim()
+    |> String.slice(0..max_length)
+
+    Regex.replace(~r/\s\s+/, clean_text, " ")
   end
 end

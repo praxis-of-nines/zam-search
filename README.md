@@ -126,10 +126,11 @@ prod#> bin/zam start
 
 # Under Development
 
-* [BUG] Duplicate images being indexed
+* [BUG] Need to scrub 404 images efficiently (or never index them)
 * [DEPRECATION] Use parse/fragment before calling Floki text function
-* [Crawl] Utilize XML sitemaps
+* [Crawl] Utilize XML sitemaps?
+* [Parser] 
 * [Index] Add to suggestions whole phrase (1st search result)
-* [Index] Implement Zam Score and Link Score (Zam score is general search wellness and quality of page/info, Link is how well it does in search results page ie was it relevant & clicked)
-* [UI] Mobile pass
-
+* [Index] Implement Zam Score and Link Score (Zam score is general search wellness and quality of page/info collected, Link is how well it does in search results page ie was it relevant & clicked)
+* [UI] Mobile pass + Bear updates
+* [Index] Add more domains to index allow list so we can test the search more
