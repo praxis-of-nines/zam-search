@@ -86,13 +86,13 @@ defmodule Zam.Crawler.PageParser do
   Extract text blurbs from the page, either using the domains custom
   content tag if provided and found, or a generic paragraph search
   """
-  def text({parsed, page_data}, nil, amount) do
+  def text({parsed, page_data}, nil, _) do
     parsed
     |> add_text(page_data)
     |> return_tuple(parsed)
   end
 
-  def text({parsed, page_data}, content_location, amount) do
+  def text({parsed, page_data}, content_location, _) do
     content = Floki.find(parsed, content_location)
 
     content
@@ -188,10 +188,6 @@ defmodule Zam.Crawler.PageParser do
   defp images_if_empty(page_data, parsed, _, _, _) do
     return_tuple(page_data, parsed)
   end
-
-  defp if_empty([], parsed, content_location), do: Floki.find(parsed, content_location)
-
-  defp if_empty(found_parsed, _, _), do: found_parsed
 
   defp return_tuple(page_data, parsed), do: {parsed, page_data}
 

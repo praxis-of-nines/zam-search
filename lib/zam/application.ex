@@ -15,8 +15,8 @@ defmodule Zam.Application do
       {Phoenix.PubSub, name: Zam.PubSub},
       ZamWeb.Endpoint,
       supervisor(Giza.Application, []),
-      supervisor(Khafra.Supervisor, []),
-      worker(Zam.Scheduler, [])
+      supervisor(Khafra.Application, []),
+      Zam.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

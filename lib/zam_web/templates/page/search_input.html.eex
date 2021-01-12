@@ -1,13 +1,19 @@
 <section class="search">
-  <img src="/bear.jpg" />
+  <img class="title_img" src="/images/bear.jpg" />
 
   <form action="#" phx-submit="search" phx-change="suggest">
-    <%= search_input :search, :text, placeholder: "", value: @search_for, autocomplete: "off", autofocus: true %>
+    <input 
+      autocomplete="off" 
+      id="search_text" 
+      name="search[text]" 
+      placeholder="" 
+      type="search" 
+      phx-keyup="complete_suggestion"
+      value="<%= @search_for %>" 
+      autofocus="" />
     <div class="suggestion" 
       style="display: <%= @display_suggest %>;" 
-      phx-click="suggestion" 
-      phx-keyup="complete_suggestion"
-      phx-target="window"
+      phx-click="complete_suggestion"
       phx-value="<%= @suggest %>"><%= @suggest %></div>
     <%= submit "Search", phx_disable_with: "Searching..", class: "search_for" %>
   </form>

@@ -25,25 +25,34 @@ header nav li {
 }
 
 .container h1 {
-  color: #38ad48;
+  color: #da7200;
+}
+
+.search .title_img {
+  width: 433px;
 }
 
 input[type='search'] {
-  border: 0.1rem solid #424242;
+  border: 0.1rem solid #929aa1;
   width: 560px;
   color: #424242;
   font-size: 15pt;
   margin-bottom: 0;
-  border-radius: 0;
+  border-radius: 6px;
+}
+input[type='search']:focus {
+  border: 0.1rem solid #929aa1;
 }
 
 form .search_for {
   display: block;
   margin: 15px auto;
+  background-color: #d57500;
+  border-color: #bd7820;
 }
 
 .view_next {
-  color: #e09318;
+  color: #d67302;
   font-weight: bold;
   margin: 15px 0;
   cursor: pointer;
@@ -54,10 +63,10 @@ form .search_for {
 }
 
 .zam {
-  color: #e09318;
+  color: #f3aa36;
 }
 .yam {
-  color: #38ad48;
+  color: #da7200;
 }
 
 nav .title {
@@ -65,7 +74,7 @@ nav .title {
   float: left;
 }
 nav .title a {
-  color: #38ad48;
+  color: #d97200;
   font-weight: bold;
   text-decoration: underline;
 }
@@ -132,6 +141,8 @@ nav .title a {
 }
 
 form .suggestion {
+  position: absolute;
+  left: calc(50% - 280px);
   display: block;
   width: 560px;
   margin: -1px auto 0 auto;

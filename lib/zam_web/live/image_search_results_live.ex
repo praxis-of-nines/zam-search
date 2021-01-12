@@ -37,9 +37,6 @@ defmodule ZamWeb.Live.ImageSearchResultsLive do
     |> no_reply()
   end
 
-  @doc """
-  Produce search suggestions
-  """
   def handle_event("suggest", %{"search" => %{"text" => ""}}, socket), do: {:noreply, socket}
 
   def handle_event("suggest", %{"search" => %{"text" => search_text}}, socket) do

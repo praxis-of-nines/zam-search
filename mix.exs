@@ -37,8 +37,8 @@ defmodule Zam.MixProject do
       {:phoenix_live_view, "~> 0.15.1"},
       {:phoenix_live_dashboard, "~> 0.4.0"},
       {:phoenix_pubsub, "~> 2.0"},
-      {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
+      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_poller, "~> 0.5"},
       {:timex, "~> 3.6"},
       {:plug_cowboy, "~> 2.1"},
       {:phoenix_ecto, "~> 4.1"},
@@ -49,21 +49,23 @@ defmodule Zam.MixProject do
       {:httpoison, "~> 1.3", override: true},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.2"},
+      {:gen_stage, "~> 0.12.2", override: true},
       # Note: this shouldn't be necessary but crawlies flow isn't deploying
       {:flow, "~> 0.12.0"},
       # Deployment
       {:distillery, "~> 2.0"},
       {:edeliver, "~> 1.8"},
       # Statistics and Indexing
-      #{:khafra_search, path: "/home/baggy/tylerpierce/khafra_search"},
-      {:khafra_search, "~> 0.1.6"},
+      {:khafra_search, path: "/home/baggy/PraxisProjects/khafra-search"},
+      #{:khafra_search, "~> 0.2.0"},
       #{:simplestatex, path: "../../../../tylerpierce/simplestatex", env: :dev, override: true},
       {:simplestatex, "~> 0.3.0"},
       {:giza_sphinxsearch, "~> 1.0.5"},
       # Crawling and Parsing
       {:crawlie, "~> 1.0.0"},
       {:floki, "~> 0.29.0"},
-      {:html5ever, "~> 0.8.0"}
+      {:html5ever, "~> 0.8.0"},
+      {:quantum, "~> 2.4"}
     ]
   end
 

@@ -6,7 +6,7 @@ defmodule ZamWeb.Live.SearchResultsLive do
 
   alias Zam.Search
 
-  @autocomplete_key "Tab"
+  @autocomplete_keys ["ArrowDown", "ArrowUp"]
 
 
   @doc """
@@ -60,14 +60,15 @@ defmodule ZamWeb.Live.SearchResultsLive do
     {:noreply, suggestion_selected(value, results, Enum.count(results), socket)}
   end
 
-  def handle_event("complete_suggestion", @autocomplete_key, %{assigns: %{suggest: value, tag: tag}} = socket) do
+  def handle_event("complete_suggestion", %{"key" => key}, %{assigns: %{suggest: value, tag: tag}} = socket)
+  when key in @autocomplete_keys do
     results = Search.query(value, 0, tag)
     |> Search.send!()
 
     {:noreply, suggestion_selected(value, results, Enum.count(results), socket)}
   end
 
-  def handle_event("complete_suggestion", _key, socket) do
+  def handle_event("complete_suggestion", key, socket) do
     {:noreply, socket}
   end
 
@@ -138,7 +139,8 @@ defmodule ZamWeb.Live.SearchResultsLive do
   end
 
   defp suggestion_selected(search_text, results, offset, socket) do
-    assign(socket, results: results, search_for: search_text, offset: offset, display_suggest: "none")
+    socket
+    |> assign(results: results, search_for: search_text, offset: offset, display_suggest: "none")
   end
 
   defp empty_result(search_text, socket) do

@@ -5,7 +5,7 @@ defmodule Zam.Search do
   alias Giza.SphinxQL
   alias Giza.Structs.SphinxqlResponse
 
-  alias SimpleStatEx, as: SSX
+  #alias SimpleStatEx, as: SSX
 
   @page_size 33
   @image_page_size 33
@@ -138,7 +138,7 @@ defmodule Zam.Search do
         |> Enum.reverse()
       {:error, _error} ->
         # Log error details here as well
-        _ = SSX.stat("sphinx search definition error", :hourly) |> SSX.save()
+        #_ = SSX.stat("sphinx search definition error", :hourly) |> SSX.save()
 
         []
     end
@@ -160,7 +160,7 @@ defmodule Zam.Search do
           [match|acc]
         end))
       {:error, _error} ->
-        _ = SSX.stat("sphinx suggest error", :hourly) |> SSX.save()
+        #_ = SSX.stat("sphinx suggest error", :hourly) |> SSX.save()
 
         []
     end
