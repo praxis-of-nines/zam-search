@@ -150,7 +150,7 @@ defmodule Zam.Crawler.ProcessPage do
   end
 
   defp clean_text(text, max_length) do
-    clean_text = Regex.replace(~r/[^a-zA-Z0-9 -,?\.]/, text, "")
+    clean_text = HtmlSanitizeEx.strip_tags(text)
     |> String.trim()
     |> String.slice(0..max_length)
 

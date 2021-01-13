@@ -56,8 +56,8 @@ defmodule Zam.MixProject do
       {:distillery, "~> 2.0"},
       {:edeliver, "~> 1.8"},
       # Statistics and Indexing
-      {:khafra_search, path: "/home/baggy/PraxisProjects/khafra-search"},
-      #{:khafra_search, "~> 0.2.0"},
+      #{:khafra_search, path: "/home/baggy/PraxisProjects/khafra-search"},
+      {:khafra_search, "~> 0.2.0"},
       #{:simplestatex, path: "../../../../tylerpierce/simplestatex", env: :dev, override: true},
       {:simplestatex, "~> 0.3.0"},
       {:giza_sphinxsearch, "~> 1.0.5"},
@@ -65,7 +65,8 @@ defmodule Zam.MixProject do
       {:crawlie, "~> 1.0.0"},
       {:floki, "~> 0.29.0"},
       {:html5ever, "~> 0.8.0"},
-      {:quantum, "~> 2.4"}
+      {:quantum, "~> 2.4"},
+      {:html_sanitize_ex, git: "https://github.com/Tyler-pierce/html_sanitize_ex.git", branch: "master"}
     ]
   end
 
