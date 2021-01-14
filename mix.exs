@@ -66,7 +66,7 @@ defmodule Zam.MixProject do
       {:floki, "~> 0.29.0"},
       {:html5ever, "~> 0.8.0"},
       {:quantum, "~> 2.4"},
-      {:html_sanitize_ex, git: "https://github.com/Tyler-pierce/html_sanitize_ex.git", branch: "master"}
+      {:fast_sanitize, "~> 0.2.2"}
     ]
   end
 

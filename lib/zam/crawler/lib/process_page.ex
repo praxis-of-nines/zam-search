@@ -150,7 +150,8 @@ defmodule Zam.Crawler.ProcessPage do
   end
 
   defp clean_text(text, max_length) do
-    clean_text = HtmlSanitizeEx.strip_tags(text)
+    clean_text = text
+    |> FastSanitize.strip_tags()
     |> String.trim()
     |> String.slice(0..max_length)
 
