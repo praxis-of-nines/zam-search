@@ -52,7 +52,6 @@ defmodule Zam.Crawler.ProcessPage do
 
             Map.put(acc, :weblink, weblink_id)
           {:error, _error} ->
-            IO.inspect attr
             acc
           _ ->
             acc

@@ -15,7 +15,7 @@
             </a></div>
           <% end %>
           <div class="title"><a href="<%= result.link %>"><%= result.title %></a></div>
-          <div class="link"><a href="<%= result.link %>"><%= result.link %></a></div>
+          <div class="link"><a href="<%= result.link %>"><%= URI.parse(result.link) |> Map.get(:host) %></a></div>
           <div clsas="description"><%= result.description %></div>
         </div>
       <% _ -> %>

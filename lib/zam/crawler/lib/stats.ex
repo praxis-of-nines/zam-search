@@ -8,8 +8,8 @@ defmodule Zam.Crawler.Stats do
   Store statistics for all the page responses gathered thus far
   """
   def store_responses(_domain, response_map) do
-    Enum.each(response_map, fn {code, _amount} ->
-      _code = Integer.to_string(code)
+    Enum.each(response_map, fn {_code, _amount} ->
+      #_code = Integer.to_string(code)
 
       #SSX.stat("crawl #{code} #{domain}", :daily, amount) |> SSX.save()
       :ok

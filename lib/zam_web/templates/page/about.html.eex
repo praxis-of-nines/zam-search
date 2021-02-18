@@ -1,14 +1,19 @@
-<h1>About Yam<span class="zam">Zam</span> Search</h1>
-<p>Zam is a walled search that only indexes select domains. Yam is The Way.</p>
+<h1>What's in the name Yam<span class="zam">Zam</span> Search</h1>
+<p>Zam is a walled search based out of Tartaria that only indexes select domains. Yam is The Way.</p>
 
 <h2>Policy</h2>
-<p>There is no user tracking of any kind. You can search and be on your way.</p>
+<p>There is no user tracking. The cookie in use maintains a search session using a rendering engine called LiveView.</p>
+
+<h2>Tech Used</h2>
+<p>100% of all technology used is open source and completely customizable. This means we have control over scraping, 
+parsing, indexing, searching and storing web data. None of your results come from any other source (we also carry the blame when you cannot find what you want!).
+</p>
 
 <h2>Terms of Service</h2>
-<p>You can use this service to find things. The news, height conversion tooling and castles.</p>
+<p>You can use this service to find things. The news, height conversion tooling, castles and a variety of logos driven content.</p>
 
 <h2>How <span class="yam">Yam</span><span class="zam">Zam</span> Makes Money</h2>
-<p>It doesn't.</p>
+<p>It doesn't unfortunately.</p>
 
 <h2><span class="yam">Yam</span><span class="zam">Zam</span> Usage Tips</h2>
 <p>
@@ -18,7 +23,7 @@
     <li>'Or' search: news | rogan</li>
     <li>Exclusion: news !Gab</li>
     <li>By title only: @title The Irish News</li>
-    <li>Exclude title: @!title youtube</li>
+    <li>Exclude title: @!title Justin</li>
     <li>Phrase search: "all handmade items"</li>
   </ul>
 </p>

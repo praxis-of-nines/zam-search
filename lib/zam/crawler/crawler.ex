@@ -19,10 +19,22 @@ defmodule Zam.Crawler do
   def crawl(:all), do: crawl_async(QueryWeblinks.get_indices(:all))
   def crawl(:test), do: crawl_async(QueryWeblinks.get_indices("test"))
   def crawl(:test2), do: crawl_async(QueryWeblinks.get_indices("test2"))
-  def crawl(:daily), do: crawl_async(QueryWeblinks.get_indices("daily"))
-  def crawl(:hourly), do: crawl_async(QueryWeblinks.get_indices("hourly"))
-  def crawl(:weekly), do: crawl_async(QueryWeblinks.get_indices("weekly"))
-  def crawl(:monthly), do: crawl_async(QueryWeblinks.get_indices("monthly"))
+  def crawl(:daily) do
+    IO.puts("Running Daily Index")
+    crawl_async(QueryWeblinks.get_indices("daily"))
+  end
+  def crawl(:hourly) do 
+    IO.puts("Running Hourly Index")
+    crawl_async(QueryWeblinks.get_indices("hourly"))
+  end
+  def crawl(:weekly) do
+    IO.puts("Running Weekly Index")
+    crawl_async(QueryWeblinks.get_indices("weekly"))
+  end
+  def crawl(:monthly) do
+    IO.puts("Running Monthly Index")
+    crawl_async(QueryWeblinks.get_indices("monthly"))
+  end
 
   def crawl(url) when is_binary(url) do
     case QueryWeblinks.get_webdomain(url) do

@@ -40,11 +40,20 @@ defmodule Zam.Crawler.PageParser do
   Extract page data from the meta contents
   """
   def meta({parsed, page_data}) do
-    Floki.find(parsed, "meta")
-    |> Enum.reduce(page_data, fn m, p_d ->
-      Floki.attribute(m, "property")
+    parsed
+    |> Floki.find("meta")
+    |> Enum.reduce(page_data, fn meta, page_data ->
+      property = meta
+      |> Floki.attribute("property")
       |> List.first()
-      |> add_meta(m, p_d)
+
+      name = meta
+      |> Floki.attribute("name")
+      |> List.first()
+
+      page_data
+      |> add_meta(property, meta)
+      |> add_meta(name, meta)
     end)
     |> return_tuple(parsed)
   end
@@ -109,21 +118,30 @@ defmodule Zam.Crawler.PageParser do
 
   # PRIVATE FUNCTIONS
   ###################
-  defp add_meta("og:image", meta, %{img: nil} = page_data) do
+  defp add_meta(page_data, "og:description", meta), do: add_meta(page_data, "description", meta)
+
+  defp add_meta(page_data, "description", meta) do
+    case Floki.attribute(meta, "content") do
+      [desc] -> Map.put(page_data, :text, desc)
+      _ -> page_data
+    end
+  end
+
+  defp add_meta(%{img: nil} = page_data, "og:image", meta) do
     case Floki.attribute(meta, "content") do
       [img] -> add_image(img, page_data)
       _ -> page_data
     end
   end
 
-  defp add_meta("article:published_time", meta, %{datetime: nil} = page_data) do
+  defp add_meta(%{datetime: nil} = page_data, "article:published_time", meta) do
     datetime = Floki.attribute(meta, "content")
     |> List.first()
 
     %{page_data | inserted_at: datetime}
   end
 
-  defp add_meta(_, _, page_data), do: page_data
+  defp add_meta(page_data, _, _), do: page_data
 
   defp add_titles([parsed_title|_], :h1, %{headings: headings} = page_data) do
     headings = Map.put(headings, :h1, Floki.text(parsed_title))
@@ -143,7 +161,10 @@ defmodule Zam.Crawler.PageParser do
     paragraph_text = content
     |> Floki.text(sep: " ")
 
-    Map.put(page_data, :text, paragraph_text)
+    case Map.get(page_data, :text) do
+      nil -> Map.put(page_data, :text, paragraph_text)
+      _ -> page_data
+    end
   end
 
   defp add_page_title(nil, page_data), do: page_data
