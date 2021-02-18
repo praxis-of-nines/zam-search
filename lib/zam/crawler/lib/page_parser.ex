@@ -163,7 +163,7 @@ defmodule Zam.Crawler.PageParser do
 
     case Map.get(page_data, :text) do
       nil -> Map.put(page_data, :text, paragraph_text)
-      _ -> page_data
+      prev_text -> Map.put(page_data, :text, prev_text <> " " <> paragraph_text)
     end
   end
 

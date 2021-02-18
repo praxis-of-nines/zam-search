@@ -155,6 +155,8 @@ defmodule Zam.Crawler.ProcessPage do
     |> String.trim()
     |> String.slice(0..max_length)
 
-    Regex.replace(~r/\s\s+/, clean_text, " ")
+    clean_text = Regex.replace(~r/(&quot;)/, clean_text, "")
+
+    Regex.replace(~r/(&quot;)\s\s+/, clean_text, " ")
   end
 end
