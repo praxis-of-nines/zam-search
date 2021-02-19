@@ -69,6 +69,8 @@ defmodule Zam.Crawler.ProcessPage do
   def store_text_blob(%{:weblink => weblink_id} = acc, attr) when is_integer(weblink_id) do
     case QueryWeblinks.get_text_blob(weblink_id) do
       nil ->
+        IO.inspect "POY"
+        IO.inspect attr
         case QueryWeblinks.create_text_blob(Map.put(attr, :weblink_id, weblink_id)) do
           {:ok, %{weblink_id: weblink_id}} -> 
             Map.put(acc, :text_blob, weblink_id)
@@ -154,6 +156,7 @@ defmodule Zam.Crawler.ProcessPage do
     |> elem(1)
     |> String.trim()
     |> String.slice(0..max_length)
+    |> Zam.String.strip_utf()
 
     clean_text = Regex.replace(~r/(&quot;)/, clean_text, "")
 
