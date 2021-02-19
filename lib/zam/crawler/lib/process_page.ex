@@ -8,7 +8,7 @@ defmodule Zam.Crawler.ProcessPage do
   alias Zam.Crawler.Stats
   alias Zam.Schema.QueryWeblinks
 
-  @description_max 250
+  @description_max 220
   @title_max 180
   @longtext_max 10000
 
@@ -18,7 +18,8 @@ defmodule Zam.Crawler.ProcessPage do
   and images if valid
   """
   def store_page_data(%PageData{imgs: imgs} = page_data) do
-    weblink_attr = build_weblink_data(%{}, :link, page_data)
+    weblink_attr = %{}
+    |> build_weblink_data(:link, page_data)
     |> build_weblink_data(:updated_at, page_data)
     |> build_weblink_data(:samples, page_data)
     |> build_weblink_data(:description, page_data)
@@ -103,7 +104,7 @@ defmodule Zam.Crawler.ProcessPage do
 
   defp build_weblink_data(acc, :link, %{uri: %{host: host, path: path}}) do
     cond do
-      String.length("https://#{host}#{path}") < 255 ->
+      String.length("https://#{host}#{path}") < 245 ->
         Map.put(acc, :link, String.trim("https://#{host}#{path}", "/"))
       true ->
         acc
@@ -113,7 +114,7 @@ defmodule Zam.Crawler.ProcessPage do
   defp build_weblink_data(acc, :samples, %PageData{samples: nil}), do: acc
 
   defp build_weblink_data(acc, :samples, %PageData{samples: samples}) do
-    Map.put(acc, :samples, clean_text(samples, 250))
+    Map.put(acc, :samples, clean_text(samples, 180))
   end
 
   defp build_weblink_data(acc, :index, %PageData{index: i}) do
@@ -131,7 +132,7 @@ defmodule Zam.Crawler.ProcessPage do
   defp build_weblink_data(acc, :img, %PageData{img: nil}), do: acc
 
   defp build_weblink_data(acc, :img, %PageData{img: img_src}) do
-    if String.length(img_src) < 255 do
+    if String.length(img_src) < 235 do
       Map.put(acc, :img, String.trim(img_src))
     else
       acc
@@ -160,7 +161,7 @@ defmodule Zam.Crawler.ProcessPage do
     |> String.slice(0..max_length)
     |> Zam.String.strip_utf()
 
-    clean_text = Regex.replace(~r/(&quot;)/, clean_text, "")
+    clean_text = Regex.replace(~r/(&quot;|&#39;)/, clean_text, "")
 
     Regex.replace(~r/(&quot;)\s\s+/, clean_text, " ")
   end
