@@ -69,8 +69,6 @@ defmodule Zam.Crawler.ProcessPage do
   def store_text_blob(%{:weblink => weblink_id} = acc, attr) when is_integer(weblink_id) do
     case QueryWeblinks.get_text_blob(weblink_id) do
       nil ->
-        IO.inspect "POY"
-        IO.inspect attr
         case QueryWeblinks.create_text_blob(Map.put(attr, :weblink_id, weblink_id)) do
           {:ok, %{weblink_id: weblink_id}} -> 
             Map.put(acc, :text_blob, weblink_id)
@@ -123,7 +121,7 @@ defmodule Zam.Crawler.ProcessPage do
   end
 
   defp build_weblink_data(acc, :title, %PageData{title: title_text}) do
-    Map.put(acc, :title, String.slice(String.trim(title_text), 0..@title_max))
+    Map.put(acc, :title, clean_text(title_text, @title_max))
   end
 
   defp build_weblink_data(acc, :img, %PageData{img: nil}), do: acc
