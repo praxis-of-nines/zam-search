@@ -46,8 +46,12 @@ defmodule Zam.Crawler.ProcessPage do
           {:ok, %{id: weblink_id}} ->
             # Create Images
             _ = Enum.map(imgs, fn img -> 
-              %{weblink_id: weblink_id, url: img}
-              |> QueryWeblinks.create_image()
+              if String.length(img) < 255 do
+                %{weblink_id: weblink_id, url: img}
+                |> QueryWeblinks.create_image()
+              else
+                img
+              end
             end)
 
             Map.put(acc, :weblink, weblink_id)
