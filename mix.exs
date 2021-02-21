@@ -50,6 +50,7 @@ defmodule Zam.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.2"},
       {:gen_stage, "~> 0.12.2", override: true},
+      {:poison, "~> 3.1"},
       # Note: this shouldn't be necessary but crawlies flow isn't deploying
       {:flow, "~> 0.12.0"},
       # Deployment
