@@ -11,7 +11,7 @@ defmodule Zam.String do
     strip_utf_helper rest, [x | acc]
   end
 
-  defp strip_utf_helper(<<x>> <> rest, acc), do: strip_utf_helper(rest, acc)
+  defp strip_utf_helper(<<_x>> <> rest, acc), do: strip_utf_helper(rest, acc)
 
   defp strip_utf_helper("", acc) do
     acc

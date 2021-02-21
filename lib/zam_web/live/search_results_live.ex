@@ -9,20 +9,23 @@ defmodule ZamWeb.Live.SearchResultsLive do
   @autocomplete_keys ["ArrowDown", "ArrowUp"]
 
 
-  @doc """
-  Set default form and result arguments
-  """
   def mount(params, _session, socket) do
     {:ok, search_init(socket, params)}
   end
 
-  @doc """
-  Search results requested
-  """
-  def handle_event("search", %{"search" => %{"text" => search_for}}, socket) do
+  def handle_params(%{"s" => search_for}, _, socket) do
     socket
     |> assign(search_for: search_for)
     |> search()
+    |> no_reply()
+  end
+
+  def handle_event("search", %{"search" => %{"text" => search_for}}, socket) do
+    socket = socket
+    |> assign(search_for: search_for)
+
+    socket
+    |> push_patch(to: "/" <> build_search_params(socket.assigns))
     |> no_reply()
   end
 
@@ -37,9 +40,6 @@ defmodule ZamWeb.Live.SearchResultsLive do
     |> no_reply()
   end
 
-  @doc """
-  Produce search suggestions
-  """
   def handle_event("suggest", %{"search" => %{"text" => ""}}, socket), do: {:noreply, socket}
 
   def handle_event("suggest", %{"search" => %{"text" => search_text}}, socket) do
@@ -50,9 +50,6 @@ defmodule ZamWeb.Live.SearchResultsLive do
     {:noreply, suggest_results(Enum.join(Enum.reverse([List.first(results)|rest]), " "), socket)}
   end
 
-  @doc """
-  Use a search suggestion
-  """
   def handle_event("suggestion", value, socket) do
     results = Search.query(value)
     |> Search.send!()
@@ -155,6 +152,27 @@ defmodule ZamWeb.Live.SearchResultsLive do
       display_suggest: "none"
     )
   end
+
+  defp build_search_params(assigns), do: build_search_params(assigns, :s, "?")
+
+  defp build_search_params(%{search_for: s} = assigns, :s, params) when s in [nil, ""] do
+    build_search_params(assigns, :t, params)
+  end
+
+  defp build_search_params(%{search_for: s} = assigns, :s, params) do
+    build_search_params(assigns, :t, append_param(params, "s=#{s}"))
+  end
+
+  defp build_search_params(%{tag: t} = assigns, :t, params) when t in [nil, ""] do
+    params
+  end
+
+  defp build_search_params(%{tag: t} = assigns, :t, params) do
+    append_param(params, "t=#{t}")
+  end
+
+  defp append_param("?", param), do: "?#{param}"
+  defp append_param(params, param), do: "#{params}&#{param}"
 
   defp no_reply(socket), do: {:noreply, socket}
 end

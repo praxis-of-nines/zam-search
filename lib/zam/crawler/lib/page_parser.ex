@@ -62,11 +62,12 @@ defmodule Zam.Crawler.PageParser do
   Extract data from the title tags
   """
   def titles({parsed, page_data}) do
-    page_data = Floki.find(parsed, "h1")
+    page_data = parsed
+    |> Floki.find("h1")
     |> add_titles(:h1, page_data)
 
-    Floki.find(parsed, "h2")
-    |> Floki.text(sep: ",")
+    parsed
+    |> Floki.find("h2")
     |> add_titles(:h2, page_data)
     |> return_tuple(parsed)
   end

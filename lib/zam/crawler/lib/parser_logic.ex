@@ -14,7 +14,7 @@ defmodule Zam.Crawler.ParserLogic do
     case Response.content_type_simple(response) do
       "text/html" ->
         try do
-          {:ok, Floki.parse(response.body)}
+          {:ok, Floki.parse_document(response.body)}
         rescue
           e in CaseClauseError -> 
             IO.inspect e

@@ -1,5 +1,6 @@
 defmodule ZamWeb.Router do
   use ZamWeb, :router
+  import Phoenix.LiveView.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
