@@ -64,7 +64,7 @@ defmodule Zam.MixProject do
       # Crawling and Parsing
       {:crawlie, "~> 1.0.0"},
       {:floki, "~> 0.29.0"},
-      {:html5ever, "~> 0.8.0"},
+      #{:html5ever, "~> 0.8.0"},
       {:quantum, "~> 2.4"},
       {:fast_sanitize, "~> 0.2.2"}
     ]

@@ -124,6 +124,13 @@ prod#> bin/zam start
 # Your schedulers will take care of indexing and crawling from here on out long as the site is up
 ```
 
+```
+eDeliver + Distillery Release
+
+MIX_ENV=prod mix edeliver build release --mix-env=prod
+MIX_ENV=prod mix edeliver deploy release prod --start-deploy
+```
+
 # Under Development
 
 * [BUG] Need to scrub 404 images efficiently (or never index them)
