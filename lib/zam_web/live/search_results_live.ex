@@ -13,10 +13,22 @@ defmodule ZamWeb.Live.SearchResultsLive do
     {:ok, search_init(socket, params)}
   end
 
+  def handle_params(%{"t" => tag} = params, r, socket) do
+    socket = socket
+    |> assign(tag: tag)
+    
+    handle_params(Map.drop(params, ["t"]), r, socket)
+  end
+
   def handle_params(%{"s" => search_for}, _, socket) do
     socket
     |> assign(search_for: search_for)
     |> search()
+    |> no_reply()
+  end
+
+  def handle_params(_, _, socket) do
+    socket
     |> no_reply()
   end
 
@@ -163,11 +175,11 @@ defmodule ZamWeb.Live.SearchResultsLive do
     build_search_params(assigns, :t, append_param(params, "s=#{s}"))
   end
 
-  defp build_search_params(%{tag: t} = assigns, :t, params) when t in [nil, ""] do
+  defp build_search_params(%{tag: t}, :t, params) when t in [nil, ""] do
     params
   end
 
-  defp build_search_params(%{tag: t} = assigns, :t, params) do
+  defp build_search_params(%{tag: t}, :t, params) do
     append_param(params, "t=#{t}")
   end
 
