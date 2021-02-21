@@ -48,7 +48,7 @@ config :khafra_search, Khafra.Scheduler,
   global: true,
   timeout: :infinity,
   jobs: [
-    {"@daily", {Khafra.Job.Index, :run, [
+    {"45 * * * *", {Khafra.Job.Index, :run, [
       [{:option, "--rotate"}, {:option, "--all"}]
     ]}}
   ]

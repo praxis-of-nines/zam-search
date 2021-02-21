@@ -68,7 +68,7 @@ defmodule ZamWeb.Live.SearchResultsLive do
     {:noreply, suggestion_selected(value, results, Enum.count(results), socket)}
   end
 
-  def handle_event("complete_suggestion", key, socket) do
+  def handle_event("complete_suggestion", _key, socket) do
     {:noreply, socket}
   end
 
