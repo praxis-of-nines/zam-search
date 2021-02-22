@@ -14,7 +14,7 @@ defmodule Zam.Crawler.ParserLogic do
     case Response.content_type_simple(response) do
       "text/html" ->
         try do
-          {:ok, Floki.parse_document(response.body)}
+          Floki.parse_document(response.body)
         rescue
           e in CaseClauseError -> 
             IO.inspect e
@@ -62,7 +62,8 @@ defmodule Zam.Crawler.ParserLogic do
   def extract_uris(response, parsed, options) do
     current_uri = response.uri
 
-    hrefs = Floki.find(parsed, "a")
+    hrefs = parsed
+    |> Floki.find("a")
     |> Floki.filter_out("[rel=nofollow]")
     |> Floki.attribute("a", "href")
 
@@ -73,9 +74,7 @@ defmodule Zam.Crawler.ParserLogic do
       domain when is_binary(domain) ->
         # Shuffle creates a situation where we visit different pages first each crawl, so
         # there is variety in the case of a max visits interrupt
-        IO.inspect("URIS for #{domain}")
         uris
-        |> IO.inspect()
         |> Enum.filter(&(valid_to_crawl(String.trim(domain, "/"), &1.host, &1.path, options)))
         |> Enum.shuffle()
       _ ->
@@ -90,7 +89,6 @@ defmodule Zam.Crawler.ParserLogic do
     !String.contains?(path, Keyword.get(rules, :disallow, []))
   end
   defp valid_to_crawl(domain, host, _, _) do
-    IO.inspect("Invalid Domain #{domain}:#{host}")
     false
- end
+  end
 end
