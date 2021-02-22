@@ -122,7 +122,7 @@ defmodule Zam.Crawler do
 
   defp crawl_async(indices) do
     crawl_tasks = Enum.reduce(indices, [], fn %{index: i, webdomain: %{id: id, domain: domain}}, acc ->
-      IO.inspect("Crawling i#{i}:#{id}:#{domain}")
+      IO.inspect("Crawling #{id}:#{domain}")
       [Task.async(fn -> crawl(id, domain, i) end)|acc]
     end)
 
