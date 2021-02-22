@@ -120,10 +120,14 @@ defmodule Zam.Crawler do
 
   defp crawl_async(indices) do
     crawl_tasks = Enum.reduce(indices, [], fn %{index: i, webdomain: %{id: id, domain: domain}}, acc ->
+      IO.inspect("Crawling #{id}:${domain}")
       [Task.async(fn -> crawl(id, domain, i) end)|acc]
     end)
 
-    Enum.map(crawl_tasks, fn crawl_task -> Task.await(crawl_task, :infinity) end)
+    Enum.map(crawl_tasks, fn crawl_task -> 
+      Task.await(crawl_task, :infinity)
+      IO.inspect "Finished a crawl"
+    end)
   end
 
   defp build_options(url, %{index: index}, rules), do: build_options(url, index, rules)
@@ -147,16 +151,16 @@ defmodule Zam.Crawler do
       image_i: image_i,
       content: content,
       min_demand: 1,
-      max_demand: 5,
+      max_demand: 50,
       max_visits: max_visits,
-      interval: crawl_interval * 1000, # Crawlie counts miliseconds
+      interval: max(1, crawl_interval * 1000), # Crawlie counts miliseconds
       fetch_phase: [
         stages: stages,
         min_demand: min_demand,
         max_demand: max_demand,
       ],
       process_phase: [
-        stages: 20,
+        stages: 3,
         min_demand: 1,
         max_demand: 20,
       ],
@@ -172,10 +176,9 @@ defmodule Zam.Crawler do
   defp get_option_max_visits(1), do: 30000
   defp get_option_max_visits(10), do: 20000
   defp get_option_max_visits(0), do: 200000
-  defp get_option_max_visits(integer) when integer < 10, do: 10000
-  defp get_option_max_visits(_integer), do: 2000
+  defp get_option_max_visits(integer) when integer < 10, do: 30000
+  defp get_option_max_visits(_integer), do: 30000
 
   # Flow settings for crawler: {Stages, Min Demand, Max Demand}
-  defp get_option_fetch_phase(0), do: {20, 1, 30}
-  defp get_option_fetch_phase(_), do: {1, 1, 2}
+  defp get_option_fetch_phase(_), do: {3, 1, 20}
 end

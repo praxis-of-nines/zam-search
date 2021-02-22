@@ -41,14 +41,14 @@ defmodule ZamWeb.Live.SearchResultsLive do
     |> no_reply()
   end
 
-  def handle_event("search_results_next_page", _, %{assigns: %{search_for: search_for, offset: offset, tag: tag}} = socket) do
+  def handle_event("search_results_next_page", _, %{assigns: %{results: prev, search_for: search_for, offset: offset, tag: tag}} = socket) do
     results = search_for
     |> Search.query(offset, tag)
     |> Search.send!()
 
     offset = offset + Enum.count(results)
 
-    search_results(search_for, results, offset, socket)
+    search_results(search_for, Enum.take(prev ++ results, -60), offset, socket)
     |> no_reply()
   end
 

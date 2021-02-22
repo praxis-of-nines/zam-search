@@ -7,7 +7,7 @@ defmodule Zam.Search do
 
   #alias SimpleStatEx, as: SSX
 
-  @page_size 33
+  @page_size 20
   @image_page_size 33
 
 

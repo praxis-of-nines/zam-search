@@ -8,17 +8,10 @@ defmodule ZamWeb.Live.ImageSearchResultsLive do
 
   @autocomplete_key "Tab"
 
-
-  @doc """
-  Set default form and result arguments
-  """
   def mount(params, _session, socket) do
     {:ok, search_init(socket, params)}
   end
 
-  @doc """
-  Search results requested
-  """
   def handle_event("search", %{"search" => %{"text" => search_for}}, socket) do
     socket
     |> assign(search_for: search_for)
@@ -47,9 +40,6 @@ defmodule ZamWeb.Live.ImageSearchResultsLive do
     {:noreply, suggest_results(Enum.join(Enum.reverse([List.first(results)|rest]), " "), socket)}
   end
 
-  @doc """
-  Use a search suggestion
-  """
   def handle_event("suggestion", value, socket) do
     results = Search.query_images(value)
     |> Search.send!()
