@@ -13,4 +13,8 @@ defmodule ZamWeb.PageController do
   def paiza(conn, _params) do
     render(conn, "paiza.html")
   end
+
+  def challenge(conn, _params) do
+    render(conn, "challenge.html")
+  end
 end

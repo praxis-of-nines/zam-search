@@ -26,6 +26,7 @@ defmodule ZamWeb.Router do
     pipe_through :browser
 
     get "/about", PageController, :about
+    get "/.well-known/acme-challenge/:challenge", PageController, :challenge
   end
 
   if Mix.env() in [:dev, :test] do
