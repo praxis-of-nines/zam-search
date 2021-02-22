@@ -73,7 +73,9 @@ defmodule Zam.Crawler.ParserLogic do
       domain when is_binary(domain) ->
         # Shuffle creates a situation where we visit different pages first each crawl, so
         # there is variety in the case of a max visits interrupt
+        IO.inspect("URIS for #{domain}")
         uris
+        |> IO.inspect()
         |> Enum.filter(&(valid_to_crawl(String.trim(domain, "/"), &1.host, &1.path, options)))
         |> Enum.shuffle()
       _ ->
@@ -87,5 +89,8 @@ defmodule Zam.Crawler.ParserLogic do
 
     !String.contains?(path, Keyword.get(rules, :disallow, []))
   end
-  defp valid_to_crawl(_, _, _, _), do: false
+  defp valid_to_crawl(domain, host, _, _) do
+    IO.inspect("Invalid Domain #{domain}:#{host}")
+    false
+ end
 end
