@@ -111,7 +111,8 @@ defmodule Zam.Crawler do
     if Crawlie.Stats.Server.Data.finished?(stats) do
       Stats.store_responses(domain, stats.status_codes_dist)
 
-      IO.inspect(stats.status_codes_dist)
+      IO.inspect("Finished crawling #{domain}")
+      IO.inspect(stats)
 
       :ok
     else
@@ -128,7 +129,6 @@ defmodule Zam.Crawler do
 
     Enum.map(crawl_tasks, fn crawl_task -> 
       Task.await(crawl_task, :infinity)
-      IO.inspect "Finished a crawl"
     end)
   end
 
