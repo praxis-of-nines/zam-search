@@ -14,7 +14,7 @@ defmodule Zam.Application do
       ZamWeb.Telemetry,
       {Phoenix.PubSub, name: Zam.PubSub},
       ZamWeb.Endpoint,
-      supervisor(Giza.Application, []),
+      Giza.Application,
       supervisor(Khafra.Application, []),
       Zam.Scheduler
     ]

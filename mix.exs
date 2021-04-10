@@ -56,11 +56,12 @@ defmodule Zam.MixProject do
       {:distillery, "~> 2.0"},
       {:edeliver, "~> 1.8"},
       # Statistics and Indexing
-      #{:khafra_search, path: "/home/baggy/PraxisProjects/khafra-search"},
+      #{:khafra_search, path: "../khafra-search"},
       {:khafra_search, "~> 0.2.0"},
-      #{:simplestatex, path: "../../../../tylerpierce/simplestatex", env: :dev, override: true},
+      #{:simplestatex, path: "../simplestatex"},
       {:simplestatex, "~> 0.3.0"},
-      {:giza_sphinxsearch, "~> 1.0.5"},
+      #{:giza_sphinxsearch, path: "../giza_sphinxsearch"}
+      {:giza_sphinxsearch, git: "https://github.com/Tyler-pierce/giza_sphinxsearch.git"},
       # Crawling and Parsing
       {:crawlie, "~> 1.0.0"},
       {:floki, "~> 0.29.0"},

@@ -111,9 +111,6 @@ defmodule Zam.Crawler do
     if Crawlie.Stats.Server.Data.finished?(stats) do
       Stats.store_responses(domain, stats.status_codes_dist)
 
-      IO.inspect("Finished crawling #{domain}")
-      IO.inspect(stats)
-
       :ok
     else
       Process.sleep(10000)
@@ -123,7 +120,6 @@ defmodule Zam.Crawler do
 
   defp crawl_async(indices) do
     crawl_tasks = Enum.reduce(indices, [], fn %{index: i, webdomain: %{id: id, domain: domain}}, acc ->
-      IO.inspect("Crawling #{id}:#{domain}")
       [Task.async(fn -> crawl(id, domain, i) end)|acc]
     end)
 
