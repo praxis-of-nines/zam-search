@@ -10,12 +10,16 @@
       <% %{title: _, link: _, description: _} -> %>
         <div class="result">
           <%= if Map.get(result, :img) && String.length(result.img) > 0 do %>
-            <div class="img"><a href="<%= result.link %>">
+            <div class="img"><a href="<%= result.link %>" phx-click="link_visited" phx-value-link="<%= result.link %>">
               <img src="<%= result.img %>" />
             </a></div>
           <% end %>
-          <div class="title"><a href="<%= result.link %>"><%= result.title %></a></div>
-          <div class="link"><a href="<%= result.link %>"><%= URI.parse(result.link) |> Map.get(:host) %></a></div>
+          <div class="title"><a href="<%= result.link %>" phx-click="link_visited" phx-value-link="<%= result.link %>">
+            <%= result.title %>    
+          </a></div>
+          <div class="link"><a href="<%= result.link %>" phx-click="link_visited" phx-value-link="<%= result.link %>">
+            <%= URI.parse(result.link) |> Map.get(:host) %>    
+          </a></div>
           <div clsas="description"><%= result.description %></div>
         </div>
       <% _ -> %>

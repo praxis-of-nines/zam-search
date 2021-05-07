@@ -1,0 +1,52 @@
+<h1>Provide Feedback for <span class="yam">Yam</span><span class="zam">Zam</span></h1>
+
+<p>
+    Use the form to do one or more of the following:
+    <ul>
+        <li>Suggest a domain for us to scrape and index</li>
+        <li>Report a search that performed poorly</li>
+        <li>Report a domain that posted content ill suited to bears and their cubs</li>
+    </ul>
+    And add to that a short comment if you like, which can include a promo code for your business 
+    if you wish to support <span class="yam">Yam</span><span class="zam">Zam</span>.
+</p>
+<p>
+    Note that we record your IP address to keep the amount of suggestions you can make down to
+    5 at a time. The IP is not attached to any identifying info and is discarded completely once
+    the feedback has been addressed.
+</p>
+
+<div class="feedback">
+    <%= f = form_for @changeset, "#" %>
+      <%= label f, :domain %>
+      <%= text_input f, :domain, maxlength: 180, placeholder: 'https://..' %>
+      <%= error_tag f, :domain %>
+      <p class="tip">Recommended domain to crawl. Enter root domain name only please.</p>
+
+      <%= label f, :bad_search %>
+      <%= text_input f, :bad_search, maxlength: 180, placeholder: 'genghis kahn tartaria' %>
+      <%= error_tag f, :bad_search %>
+      <p class="tip">Let us know if a search returned unsatisfactory results.</p>
+
+      <%= label f, :report_domain %>
+      <%= text_input f, :report_domain, maxlength: 180, placeholder: 'https://..' %>
+      <%= error_tag f, :report_domain %>
+      <p class="tip">Tell us if a website from a search result lives not in logos and briefly why in the comment.</p>
+
+      <%= label f, :comment %>
+      <%= text_input f, :comment, maxlength: 240, placeholder: 'promo code 33666911bedsheets' %>
+      <%= error_tag f, :comment %>
+      <p class="tip">These codes may be used in the future to fund YamZam. Our costs are currently upwards of <strong>20 dollars</strong> to keep us out of hibernation.</p>
+
+      <%= hidden_input f, :ip %>
+
+      <%= submit "Send Feedback" %>
+    </form>
+</div>Join Zoom Meeting
+https://us05web.zoom.us/j/86404182207?pwd=c0lEWG1Vd2huRUw4N1RSVUF0Y0pJUT09
+
+Meeting ID: 864 0418 2207
+Passcode: P9YPU8
+
+
+

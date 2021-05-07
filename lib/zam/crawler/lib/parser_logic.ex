@@ -88,7 +88,7 @@ defmodule Zam.Crawler.ParserLogic do
 
     !String.contains?(path, Keyword.get(rules, :disallow, []))
   end
-  defp valid_to_crawl(domain, host, _, _) do
+  defp valid_to_crawl(_, _, _, _) do
     false
   end
 end

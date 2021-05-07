@@ -198,8 +198,11 @@ defmodule Zam.Crawler.PageParser do
 
   defp add_image(img, scheme, host, page_data) do
     case URI.parse(img) do
-      %URI{host: nil} -> add_image("#{scheme}://#{host}/#{img}", page_data)
-      _ -> add_image(img, page_data)
+      %URI{host: nil} -> 
+        img_trim = String.trim(img, "/")
+        add_image("#{scheme}://#{host}/#{img_trim}", page_data)
+      _ -> 
+        add_image(img, page_data)
     end
   end
 

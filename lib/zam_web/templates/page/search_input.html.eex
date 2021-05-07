@@ -1,7 +1,7 @@
 <section class="search">
   <img class="title_img" src="/images/bear.jpg" />
 
-  <form action="#" phx-submit="search" phx-change="suggest">
+  <form action="#" phx-submit="search">
     <input 
       autocomplete="off" 
       id="search_text" 
@@ -22,6 +22,7 @@
     <a href="/?s=<%= @search_for %>">All</a> 
     <a href="/images?s=<%= @search_for %>">Images</a> 
     <a href="/?t=news&s=<%= @search_for %>">News</a> 
+    <a href="/?t=comics&s=<%= @search_for %>">Comics</a> 
     <a href="/?t=blog&s=<%= @search_for %>">Blogs</a>
   </div>
 </section>

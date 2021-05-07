@@ -33,14 +33,14 @@ defmodule Zam.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5.7"},
-      {:phoenix_live_view, "~> 0.15.1"},
+      {:phoenix, "~> 1.5.8"},
+      {:phoenix_live_view, "~> 0.15.4"},
       {:phoenix_live_dashboard, "~> 0.4.0"},
       {:phoenix_pubsub, "~> 2.0"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 0.5"},
       {:timex, "~> 3.6"},
-      {:plug_cowboy, "~> 2.1"},
+      {:plug_cowboy, "~> 2.4"},
       {:phoenix_ecto, "~> 4.1"},
       {:postgrex, "~> 0.15.1"},
       {:ecto_sql, "~> 3.4"},
@@ -61,7 +61,7 @@ defmodule Zam.MixProject do
       #{:simplestatex, path: "../simplestatex"},
       {:simplestatex, "~> 0.3.0"},
       #{:giza_sphinxsearch, path: "../giza_sphinxsearch"}
-      {:giza_sphinxsearch, git: "https://github.com/Tyler-pierce/giza_sphinxsearch.git"},
+      {:giza_sphinxsearch, "~> 1.0.7"},
       # Crawling and Parsing
       {:crawlie, "~> 1.0.0"},
       {:floki, "~> 0.29.0"},

@@ -9,7 +9,11 @@ defmodule Zam.Schema.QueryWeblinks do
 
 
   # Retrievals
-  def get_weblink(link), do: Repo.get_by(Weblink, link: link)
+  def get_weblink(link) do
+    Weblink
+    |> where(link: ^link)
+    |> Repo.all()
+  end
   def get_webdomain(domain), do: Repo.get_by(Webdomain, domain: domain)
   def get_text_blob(weblink_id), do: Repo.get_by(TextBlob, weblink_id: weblink_id)
   def get_bookmark(domain_id), do: Repo.get_by(Bookmark, domain_id: domain_id)

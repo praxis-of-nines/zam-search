@@ -42,7 +42,7 @@ defmodule Zam.Crawler.ProcessPage do
 
   def store_weblink(acc, attr, imgs) do
     case QueryWeblinks.get_weblink(attr.link) do
-      nil ->
+      [] ->
         case QueryWeblinks.create_weblink(attr) do
           {:ok, %{id: weblink_id}} ->
             # Create Images
@@ -61,7 +61,9 @@ defmodule Zam.Crawler.ProcessPage do
           _ ->
             acc
         end
-      weblink -> 
+      [weblink|_] -> 
+        # If Multiple weblinks? Concurrency error. Need to fix and do cleanup here
+        # Until fix is out a while.
         case QueryWeblinks.update_weblink(weblink, attr) do
           {:ok, %{id: weblink_id}} ->
             Map.put(acc, :weblink, weblink_id)

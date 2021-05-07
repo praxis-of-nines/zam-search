@@ -10,6 +10,7 @@ defmodule Zam.Crawler do
 
   alias Zam.Crawler.ProcessPage
   alias Zam.Schema.{QueryWeblinks, Webdomain}
+  alias SimpleStatEx, as: SSX
 
   @doc """
   Crawl a single or list of domains as well as boot up the standard tracking process to monitor
@@ -109,6 +110,11 @@ defmodule Zam.Crawler do
     stats = Crawlie.Stats.Server.get_stats(ref)
 
     if Crawlie.Stats.Server.Data.finished?(stats) do
+      _ = "indexed: #{domain}"
+      |> String.slice(0..80)
+      |> SSX.stat(:daily, stats.uris_visited) 
+      |> SSX.save()
+
       Stats.store_responses(domain, stats.status_codes_dist)
 
       :ok

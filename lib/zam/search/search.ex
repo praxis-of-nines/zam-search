@@ -109,7 +109,7 @@ defmodule Zam.Search do
         # Log error details here as well
         # Simple stat needs to be updated
         # :utc_datetime_usec expects microsecond precision, got ..
-        # _ = SSX.stat("sphinx search error", :hourly) |> SSX.save()
+        #_ = SSX.stat("sphinx search error", :weekly) |> SSX.save()
 
         []
     end

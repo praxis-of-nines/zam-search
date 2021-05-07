@@ -5,6 +5,7 @@ defmodule ZamWeb.Live.SearchResultsLive do
   use ZamWeb, :live_view
 
   alias Zam.Search
+  alias SimpleStatEx, as: SSX
 
   @autocomplete_keys ["ArrowDown", "ArrowUp"]
 
@@ -49,6 +50,16 @@ defmodule ZamWeb.Live.SearchResultsLive do
     offset = offset + Enum.count(results)
 
     search_results(search_for, Enum.take(prev ++ results, -60), offset, socket)
+    |> no_reply()
+  end
+
+  def handle_event("link_visited", %{"link" => link}, socket) do
+    _ = "follow: #{link}"
+    |> String.slice(0..200)
+    |> SSX.stat(:monthly)
+    |> SSX.save()
+
+    socket
     |> no_reply()
   end
 
@@ -99,7 +110,6 @@ defmodule ZamWeb.Live.SearchResultsLive do
     socket
     |> assign(search_for: search_for)
     |> process_params(Map.drop(params, ["s"]))
-    |> search()
   end
 
   defp process_params(socket, %{"t" => tag} = params) do
@@ -111,6 +121,11 @@ defmodule ZamWeb.Live.SearchResultsLive do
   defp process_params(socket, _), do: socket
 
   defp search(%{assigns: %{search_for: search_for, tag: tag}} = socket) do
+    _ = "search: #{search_for}"
+    |> String.slice(0..80)
+    |> SSX.stat(:weekly) 
+    |> SSX.save()
+
     results = search_for
     |> Search.query(0, tag)
     |> Search.send!()
