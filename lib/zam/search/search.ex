@@ -82,12 +82,12 @@ defmodule Zam.Search do
 
   def where(query, "", tag) do
     query
-    |> SphinxQL.Recipe.match_and_filter("", tags: tag)
+    |> SphinxQL.where("MATCH('@tags tags_#{tag}')")
   end
 
   def where(query, text, tag) do
     query
-    |> SphinxQL.Recipe.match_and_filter("*#{text}*", tags: tag)
+    |> SphinxQL.where("MATCH('*#{text}* @tags tags_#{tag}')")
   end
 
   def send(query), do: query |> SphinxQL.send()

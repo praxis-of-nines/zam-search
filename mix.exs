@@ -57,7 +57,7 @@ defmodule Zam.MixProject do
       {:edeliver, "~> 1.8"},
       # Statistics and Indexing
       #{:khafra_search, path: "../khafra-search"},
-      {:khafra_search, "~> 0.2.0"},
+      {:khafra_search, "~> 0.2.1"},
       #{:simplestatex, path: "../simplestatex"},
       {:simplestatex, "~> 0.3.0"},
       #{:giza_sphinxsearch, path: "../giza_sphinxsearch"}
