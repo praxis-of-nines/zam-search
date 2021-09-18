@@ -172,6 +172,114 @@ form .suggestion {
 .feedback button {
   margin: 15px 0;
 }
+/* Calendar */
+.enoch {
+  width: 272px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 33px;
+}
+.datetime {
+  position: relative;
+}
+.datetime .zodiac {
+  width: 273px;
+  height: 138px;
+  position: relative;
+  margin-left: -1px;
+  /* margin: 0; */
+  /* border-top: 4px solid #234a92; */
+  /* border-right: 4px solid #234a92; */
+  /* border-left: 3px solid #234a92; */
+  overflow: hidden;
+  border-top-left-radius: 155px;
+  border-top-right-radius: 155px;
+}
+.datetime .zodiac .marker {
+  position: absolute;
+  top: 0px;
+  left: 135px;
+  height: 139px;
+  width: 2px;
+  background-color: #de4105;
+  opacity: 0.5;
+}
+.datetime .zodiac img {
+  max-width: unset;
+}
+.datetime .summary {
+  font-size: 20px;
+  font-weight: bold;
+  color: #525252;
+  font-family: sans-serif;
+}
+.datetime .summary .line {
+  display: flex;
+  justify-content: center;
+}
+.datetime .summary .line div {
+  margin: 0 5px 5px 5px;
+}
+.datetime .summary .date {
+  
+}
+.datetime .summary .year {
+  align-self: end;
+  text-align: right;
+}
+.datetime .summary .day {
+  
+}
+.datetime .summary .time {
+  
+}
+.enoch .dayspan {
+  display: flex;
+  position: relative;
+  height: 9px;
+  background-color: #000000;
+}
+.dayspan .marker {
+  position: absolute;
+  top: 1px;
+  height: 7px;
+  width: 3px;
+  background-color: #e46565;
+  z-index: 5;
+}
+.dayspan .overlay {
+  
+}
+.dayspan .sun {
+  display: flex;
+  flex-wrap: wrap;
+  background-image: url(/images/enoch/sun.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 190px;
+  height: 9px;
+  background-color: #1e8ab3;
+}
+.dayspan .moon {
+  display: flex;
+  flex-wrap: wrap;
+  background-image: url(/images/enoch/moon.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 146px;
+  height: 9px;
+  background-color: #3b4267;
+}
+.dayspan .sun .cell,
+.dayspan .moon .cell {
+  width: 16px;
+  height: 9px;
+  border: 1px solid #234a92;
+  margin-left: -1px;
+}
+.calendar-mini .divide {
+  color: #d47203;
+}
 
 @media screen and (max-width: 500px) {
   input[type='search'] {

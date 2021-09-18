@@ -1,0 +1,116 @@
+<% [sign, _gate, season, portals] = @cdt["season"] %>
+<% marker = @cdt["hour"] * 16 + div(@cdt["minute"] - 8, 4) %>
+<% sign_deg = case sign do
+  "aries"       -> 0
+  "taurus"      -> -30
+  "gemini"      -> -60
+  "cancer"      -> -90
+  "leo"         -> -120
+  "virgo"       -> -150
+  "libra"       -> -180
+  "scorpio"     -> -210
+  "sagittarius" -> -240
+  "capricorn"   -> -270
+  "aquarius"    -> -300
+  "pisces"      -> -330
+end - @cdt["month_day"] %>
+<div class="enoch">
+  <div class="datetime">
+    <div class="zodiac">
+      <img src="/images/enoch/zodiac.jpg" 
+        width="466px" 
+        style="transform: rotate(<%= sign_deg %>deg); margin-left: -97px; margin-top: -17px;" />
+      <div class="marker"></div>
+    </div>
+    <div class="dayspan">
+      <% {day_hours, night_hours} = portals %>
+      <div class="marker" style="left: <%= marker %>px;">&nbsp;</div>
+      <div class="sun">
+        <%= for _ <- 1..day_hours do %>
+          <div class="cell">&nbsp;</div>
+        <% end %>
+      </div>
+      <div class="moon">
+        <%= for _ <- 1..night_hours do %>
+          <div class="cell">&nbsp;</div>
+        <% end %>
+      </div>
+    </div>
+    <div class="summary">
+      <div class="line">
+        <div class="date">
+          <%= @cdt["month_day"] %><%= @cdt["month_day_postfix"] %> of 
+          <%= season |> String.split(" ") |> Enum.map(&String.capitalize(&1)) |> Enum.join(" ") %>,
+        </div>
+        <div class="year"><%= @cdt["year"] %></div>
+      </div>
+      <div class="line">
+        <div class="time"><%= @cdt["clock"] %>,</div>
+        <div class="day"><%= @cdt["week_day"] %><%= @cdt["week_day_postfix"] %> Day</div>
+        <div class="events">
+          <%= @cdt["event_day"] && Enum.join(@cdt["event_day"], ", ") %>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <select>
+        <option>Seattle, WA, USA</option>
+        <option>Sand Point, ID, USA</option>
+        <option>Albuquerque, NM, USA</option>
+        <option>Winnipeg, MB, Canada</option>
+        <option>Buffalo, NY, USA</option>
+        <option>Jacmel, Haiti</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div>
+  <h2>Why Enoch's Calendar?</h2>
+
+  <ul>
+    <li>Keeps in touch with the seasons and cycle of the day and night</li>
+    <li>The sabbath falls on the correct day every week of every year instead of 1/7th the time</li>
+    <li>Predictable timezones</li>
+    <li>Feast and fast days will fall when originally intended</li>
+    <li>Track true noon more easily</li>
+    <li>Allegedly this was the calendar Jesus was using</li>
+    <li>This is only the beginning. Many enhancements to come</li>
+  </ul>
+</div>
+
+<div>
+  <h2>How it Works</h2>
+  <p>
+    Note, the calendar is in beta testing phase. While testing and consulting with experts the 
+    calendar is subject to change.
+  </p>
+  <ul>
+    <li>The first day of the year is the morning after the Spring Equinox</li>
+    <li>Your 'timezone' depends on your sunrise. Your sunrise determines the start of the day</li>
+    <li>For simplicity the calendar slightly rounds your sunrise so you share a timezone with others</li>
+    <li>The day is divided into 18 parts/hours that are 80 minutes long</li>
+    <li>Instead of months we traverse seasons. Eg: Summer, Mid Summer, Late Summer, Autumn..</li>
+    <li>Each season the sun rise & day start are adjusted 80 minutes to reflect the portals Enoch describes. This keeps your sunrise accurate</li>
+    <li>Holidays and Sabbaths will be shown on the calendar (work in progress showing more holidays)</li>
+    <li>Every year is 364 days or events. The 364th day runs until the Spring Equinox passes and the following morning</li>
+    <li>Leap years are handled by the above event. It is simply a long day where the hours tick by until the new year. Relax and enjoy</li>
+  </ul>
+</div>
+
+<div>
+  <p>
+    Do you have a request for how you want to use the calendar? Leave a comment on the <a href="/feedback">feedback page</a>
+  </p>
+  <h4>Some examples of where this calendar could go (do comment if any seem appealing)</h4>
+  <ul>
+    <li>Full date picker such as seen on calendar widgets across the web</li>
+    <li>Open API and open source libraries so others can use Enoch's calendar</li>
+    <li>Proper datetime code library to handle durations and other math</li>
+    <li>Phone App so you can have a calendar to make appointments and reminders etc</li>
+    <li>Make smart watches useful?</li>
+    <li>Add additional star and moon cycle information</li>
+    <li>And of course always seak ancient information to ensure we are handling the calendar accurately</li>
+  </ul>
+</div>

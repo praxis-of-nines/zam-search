@@ -1,5 +1,6 @@
 <section class="search">
   <img class="title_img" src="/images/bear.jpg" />
+  <%= live_render(@socket, ZamWeb.Live.CalendarMiniLive, id: :mini_calendar) %>
 
   <form action="#" phx-submit="search">
     <input 

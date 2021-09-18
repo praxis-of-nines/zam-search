@@ -20,6 +20,7 @@ defmodule ZamWeb.Router do
 
     live "/images", Live.ImageSearchResultsLive, :index
     live "/", Live.SearchResultsLive, :index
+    live "/calendar", Live.CalendarLive, :index
   end
 
   scope "/", ZamWeb do

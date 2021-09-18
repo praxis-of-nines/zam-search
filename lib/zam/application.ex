@@ -2,8 +2,11 @@ defmodule Zam.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
-
   use Application
+
+  alias Khafra.Job.Searchd
+  alias Phoenix
+  alias Phoenix.PubSub
 
   def start(_type, _args) do
     import Supervisor.Spec
@@ -16,13 +19,25 @@ defmodule Zam.Application do
       ZamWeb.Endpoint,
       Giza.Application,
       supervisor(Khafra.Application, []),
-      Zam.Scheduler
+      Zam.Scheduler,
+      supervisor(EnochEx.Application, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Zam.Supervisor]
     Supervisor.start_link(children, opts)
+  end
+
+  def on_reboot() do
+    # Start Search Daemon
+    _ = Searchd.run([])
+    # Start Default Calendar
+    broadcast = fn cdt ->
+      PubSub.broadcast(Zam.PubSub, "calendar_ticker", cdt)
+    end
+
+    _ = EnochEx.Calendar.start_calendar(tick_callback: broadcast)
   end
 
   # Tell Phoenix to update the endpoint configuration

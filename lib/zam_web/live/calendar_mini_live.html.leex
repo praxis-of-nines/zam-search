@@ -1,0 +1,8 @@
+<% [_sign, _gate, season, _portals] = @cdt["season"] %>
+<div class="calendar-mini">
+  <%= @cdt["month_day"] %><%= @cdt["month_day_postfix"] %> of 
+  <%= season |> String.split(" ") |> Enum.map(&String.capitalize(&1)) |> Enum.join(" ") %>,
+  <%= @cdt["year"] %> <span class="divide">|</span> 
+  <%= @cdt["clock"] %>, <%= @cdt["week_day"] %><%= @cdt["week_day_postfix"] %> Day
+  <a href="/calendar">More</a>
+</div>

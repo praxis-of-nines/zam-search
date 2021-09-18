@@ -50,6 +50,7 @@ defmodule Zam.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.2"},
       {:gen_stage, "~> 0.12.2", override: true},
+      {:poison, "~> 4.0", override: true},
       # Note: this shouldn't be necessary but crawlies flow isn't deploying
       {:flow, "~> 0.12.0"},
       # Deployment
@@ -67,7 +68,9 @@ defmodule Zam.MixProject do
       {:floki, "~> 0.29.0"},
       #{:html5ever, "~> 0.8.0"},
       {:quantum, "~> 2.4"},
-      {:fast_sanitize, "~> 0.2.2"}
+      {:fast_sanitize, "~> 0.2.2"},
+      # Clock
+      {:enoch_ex, path: "../enoch_ex"}
     ]
   end
 
