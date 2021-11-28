@@ -37,7 +37,7 @@ defmodule Zam.Application do
       PubSub.broadcast(Zam.PubSub, "calendar_ticker", cdt)
     end
 
-    _ = EnochEx.Calendar.start_calendar(tick_callback: broadcast)
+    _ = EnochEx.start_calendar(tick_callback: broadcast)
   end
 
   # Tell Phoenix to update the endpoint configuration

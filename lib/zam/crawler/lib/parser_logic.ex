@@ -78,7 +78,11 @@ defmodule Zam.Crawler.ParserLogic do
         |> Enum.filter(&(valid_to_crawl(String.trim(domain, "/"), &1.host, &1.path, options)))
         |> Enum.shuffle()
       _ ->
+        rules = Keyword.get(options, :bot_rules)
+
         uris
+        |> Enum.filter(&(!String.contains?(&1.path, Keyword.get(rules, :disallow, []))))
+        |> Enum.shuffle()
     end
   end
 

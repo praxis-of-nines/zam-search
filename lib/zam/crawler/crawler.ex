@@ -137,11 +137,11 @@ defmodule Zam.Crawler do
   defp build_options(url, %{index: index}, rules), do: build_options(url, index, rules)
 
   defp build_options(url, %{id: id, depth: depth, image_i: image_i, content: content} = _index, rules) do
-    domain = case url do
-      "https://" <> domain -> domain
-      "http://" <> domain -> domain
-      domain -> domain
-    end
+    #domain = case url do
+    #  "https://" <> domain -> domain
+    #  "http://" <> domain -> domain
+    #  domain -> domain
+    #end
 
     crawl_interval = Keyword.get(rules, :delay_seconds, 0)
 
@@ -168,7 +168,7 @@ defmodule Zam.Crawler do
         min_demand: 1,
         max_demand: 20,
       ],
-      domain: domain,
+      domain: nil, # domain
       headers: [{"User-agent", Application.get_env(:zam, :user_agent)}],
       bot_rules: rules
     ]

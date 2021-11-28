@@ -174,7 +174,7 @@ form .suggestion {
 }
 /* Calendar */
 .enoch {
-  width: 272px;
+  width: 342px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 33px;
@@ -183,8 +183,8 @@ form .suggestion {
   position: relative;
 }
 .datetime .zodiac {
-  width: 273px;
-  height: 138px;
+  width: 343px;
+  height: 166px;
   position: relative;
   margin-left: -1px;
   /* margin: 0; */
@@ -192,14 +192,14 @@ form .suggestion {
   /* border-right: 4px solid #234a92; */
   /* border-left: 3px solid #234a92; */
   overflow: hidden;
-  border-top-left-radius: 155px;
-  border-top-right-radius: 155px;
+  border-top-left-radius: 167px;
+  border-top-right-radius: 167px;
 }
 .datetime .zodiac .marker {
   position: absolute;
   top: 0px;
-  left: 135px;
-  height: 139px;
+  left: 171px;
+  height: 167px;
   width: 2px;
   background-color: #de4105;
   opacity: 0.5;
@@ -272,13 +272,39 @@ form .suggestion {
 }
 .dayspan .sun .cell,
 .dayspan .moon .cell {
-  width: 16px;
+  width: 20px;
   height: 9px;
-  border: 1px solid #234a92;
+  border: 1px solid #000000;
   margin-left: -1px;
+}
+.city-listing {
+  display: flex;
+  width: 800px;
+  flex-wrap: wrap;
+  margin: 0 auto 20px auto;
+  align-content: center;
+  justify-content: center;
+}
+.city-listing button {
+  padding: 0 1rem;
+  font-size: 0.7rem;
+  line-height: 2rem;
+  height: 2rem;
+  margin: 1px 1px;
 }
 .calendar-mini .divide {
   color: #d47203;
+}
+.explanation {
+  border-top: 1px solid #000;
+  padding-top: 8px;
+  margin-top: 133px; 
+}
+.explanation h2 {
+  color: #2e6ad9;
+}
+.explanation ul {
+  font-size: 21px;
 }
 
 @media screen and (max-width: 500px) {

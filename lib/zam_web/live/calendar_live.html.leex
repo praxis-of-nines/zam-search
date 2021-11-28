@@ -1,5 +1,5 @@
 <% [sign, _gate, season, portals] = @cdt["season"] %>
-<% marker = @cdt["hour"] * 16 + div(@cdt["minute"] - 8, 4) %>
+<% marker = @cdt["hour"] * 20 + div(@cdt["minute"], 4) + @cdt["hour"] %>
 <% sign_deg = case sign do
   "aries"       -> 0
   "taurus"      -> -30
@@ -18,8 +18,8 @@ end - @cdt["month_day"] %>
   <div class="datetime">
     <div class="zodiac">
       <img src="/images/enoch/zodiac.jpg" 
-        width="466px" 
-        style="transform: rotate(<%= sign_deg %>deg); margin-left: -97px; margin-top: -17px;" />
+        width="580px" 
+        style="transform: rotate(<%= sign_deg %>deg); margin-left: -119px; margin-top: -24px;" />
       <div class="marker"></div>
     </div>
     <div class="dayspan">
@@ -51,23 +51,35 @@ end - @cdt["month_day"] %>
           <%= @cdt["event_day"] && Enum.join(@cdt["event_day"], ", ") %>
         </div>
       </div>
-    </div>
-
-    <div>
-      <select>
-        <option>Seattle, WA, USA</option>
-        <option>Sand Point, ID, USA</option>
-        <option>Albuquerque, NM, USA</option>
-        <option>Winnipeg, MB, Canada</option>
-        <option>Buffalo, NY, USA</option>
-        <option>Jacmel, Haiti</option>
-      </select>
+      <div class="line">
+        True Noon Today <%= @cdt["true_noon"] %>
+      </div>
     </div>
   </div>
 </div>
+<div class="city-listing">
+  <button phx-click="city" phx-value-city="seattle">Seattle, WA</button>
+  <button phx-click="city" phx-value-city="sand point">Sand Point, ID</button>
+  <button phx-click="city" phx-value-city="dallas">Dallas, TX</button>
+  <button phx-click="city" phx-value-city="thunder bay">Thunder Bay, Canada</button>
+  <button phx-click="city" phx-value-city="sandy hook bay">Sandy Hook Bay, NJ</button>
+  <button phx-click="city" phx-value-city="sermersooq">Sermersooq, Greenland</button>
+  <button phx-click="city" phx-value-city="dublin">Dublin, IR</button>
+  <button phx-click="city" phx-value-city="athens">Athens, GR</button>
+  <button phx-click="city" phx-value-city="qumran">Qumran</button>
+  <button phx-click="city" phx-value-city="chelyabinsk">Chelyabinsk, RU</button>
+  <button phx-click="city" phx-value-city="kochi">Kochi, India</button>
+  <button phx-click="city" phx-value-city="lhasa">Lhasa</button>
+  <button phx-click="city" phx-value-city="ulaanbaatar">Ulaanbaatar, Mongolia</button>
+  <button phx-click="city" phx-value-city="bardon">Bardon, Australia</button>
+  <button phx-click="city" phx-value-city="sapporo">Sapporo, Japan</button>
+  <button phx-click="city" phx-value-city="egvekinot">Egvekinot, RU</button>
+  <button phx-click="city" phx-value-city="chukotski">Chukotski, RU</button>
+  <button phx-click="city" phx-value-city="honolulu">Honolulu, HW</button>
+</div>
 
-<div>
-  <h2>Why Enoch's Calendar?</h2>
+<div class="explanation">
+  <h2>Why the Enoch/Zadok/Uriel Calendar?</h2>
 
   <ul>
     <li>Keeps in touch with the seasons and cycle of the day and night</li>
@@ -75,38 +87,38 @@ end - @cdt["month_day"] %>
     <li>Predictable timezones</li>
     <li>Feast and fast days will fall when originally intended</li>
     <li>Track true noon more easily</li>
-    <li>Allegedly this was the calendar Jesus was using</li>
-    <li>This is only the beginning. Many enhancements to come</li>
+    <li>Allegedly Jesus used this calendar</li>
   </ul>
 </div>
 
-<div>
+<div class="explanation">
   <h2>How it Works</h2>
   <p>
-    Note, the calendar is in beta testing phase. While testing and consulting with experts the 
-    calendar is subject to change.
+    Note, the calendar is in beta testing phase. While testing and consulting with experts, researching and the 
+    calendar is subject to change and of course additional features.
   </p>
   <ul>
-    <li>The first day of the year is the morning after the Spring Equinox</li>
+    <li>The morning after the Spring Equinox is the first day of the year (New Years!)</li>
     <li>Your 'timezone' depends on your sunrise. Your sunrise determines the start of the day</li>
-    <li>For simplicity the calendar slightly rounds your sunrise so you share a timezone with others</li>
-    <li>The day is divided into 18 parts/hours that are 80 minutes long</li>
+    <li>The day is divided into 18 parts (hours) that are 80 minutes long each</li>
     <li>Instead of months we traverse seasons. Eg: Summer, Mid Summer, Late Summer, Autumn..</li>
-    <li>Each season the sun rise & day start are adjusted 80 minutes to reflect the portals Enoch describes. This keeps your sunrise accurate</li>
+    <li>Each month the day is increased or decreased by 80 minutes to reflect the changing of the suns portal and longer/shorter days</li>
     <li>Holidays and Sabbaths will be shown on the calendar (work in progress showing more holidays)</li>
-    <li>Every year is 364 days or events. The 364th day runs until the Spring Equinox passes and the following morning</li>
+    <li>Every year is 364 days/events. The 364th day runs until the Spring Equinox passes</li>
     <li>Leap years are handled by the above event. It is simply a long day where the hours tick by until the new year. Relax and enjoy</li>
+    <li>Note; this calendar does not use a leap period as some do. The year is calibrated using the Spring Equinox event.</li>
   </ul>
 </div>
 
-<div>
+<div class="explanation">
+  <h2>Help improve this implementation!</h2>
   <p>
     Do you have a request for how you want to use the calendar? Leave a comment on the <a href="/feedback">feedback page</a>
   </p>
   <h4>Some examples of where this calendar could go (do comment if any seem appealing)</h4>
   <ul>
     <li>Full date picker such as seen on calendar widgets across the web</li>
-    <li>Open API and open source libraries so others can use Enoch's calendar</li>
+    <li>Open API and open source libraries so others can use the calendar</li>
     <li>Proper datetime code library to handle durations and other math</li>
     <li>Phone App so you can have a calendar to make appointments and reminders etc</li>
     <li>Make smart watches useful?</li>
